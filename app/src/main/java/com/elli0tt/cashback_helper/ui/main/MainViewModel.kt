@@ -2,6 +2,7 @@ package com.elli0tt.cashback_helper.ui.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.elli0tt.cashback_helper.domain.model.CashbackCategory
 import com.elli0tt.cashback_helper.domain.use_case.GetCashbackCategoriesFromImageUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,13 +15,13 @@ class MainViewModel(
     private val getCashbackCategoriesFromImageUseCase: GetCashbackCategoriesFromImageUseCase
 ) : ViewModel() {
 
-    private val _recognizedText = MutableStateFlow("")
-    val recognizedText: StateFlow<String> = _recognizedText.asStateFlow()
+    private val _cashbackCategories = MutableStateFlow(emptyList<CashbackCategory>())
+    val cashbackCategories: StateFlow<List<CashbackCategory>> = _cashbackCategories.asStateFlow()
 
     fun recognizeText(imageUri: String) {
         viewModelScope.launch {
             val cashbackCategories = getCashbackCategoriesFromImageUseCase(imageUri)
-            _recognizedText.value = cashbackCategories.joinToString()
+            _cashbackCategories.value = cashbackCategories
         }
     }
 }

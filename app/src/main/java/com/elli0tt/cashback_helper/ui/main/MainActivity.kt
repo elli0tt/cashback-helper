@@ -14,7 +14,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -32,6 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.elli0tt.cashback_helper.R
+import com.elli0tt.cashback_helper.domain.model.CashbackCategory
 import com.elli0tt.cashback_helper.ui.App
 import com.elli0tt.cashback_helper.ui.theme.CashbackHelperTheme
 import org.koin.androidx.compose.koinViewModel
@@ -69,7 +74,7 @@ fun ChoosePhotoScreen(
             }
         }
 
-    val recognizedText: String by mainViewModel.recognizedText.collectAsState()
+    val cashbackCategories: List<CashbackCategory> by mainViewModel.cashbackCategories.collectAsState()
 
     Column(
         modifier = Modifier
@@ -77,17 +82,6 @@ fun ChoosePhotoScreen(
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        AsyncImage(
-            model = imageUri,
-            contentDescription = null,
-            modifier = Modifier
-                .padding(4.dp)
-                .fillMaxWidth()
-                .height(400.dp)
-                .clip(RoundedCornerShape(12.dp)),
-            contentScale = ContentScale.Inside,
-        )
-        Text(text = recognizedText)
         Button(
             onClick = {
                 pickPhotoLauncher.launch(
@@ -96,6 +90,21 @@ fun ChoosePhotoScreen(
             },
         ) {
             Text(text = stringResource(R.string.choose_image_button))
+        }
+        AsyncImage(
+            model = imageUri,
+            contentDescription = null,
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth()
+                .height(400.dp)
+                .clip(RoundedCornerShape(12.dp)),
+            contentScale = ContentScale.Inside,
+        )
+        LazyColumn {
+            items(cashbackCategories) { cashbackCategory ->
+                Text(text = "${cashbackCategory.percent}% ${cashbackCategory.name}")
+            }
         }
     }
 }
