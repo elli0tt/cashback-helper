@@ -19,7 +19,8 @@ class MainViewModel(
 
     fun recognizeText(imageUri: String) {
         viewModelScope.launch {
-            _recognizedText.value = getCashbackCategoriesFromImageUseCase(imageUri).joinToString()
+            val cashbackCategories = getCashbackCategoriesFromImageUseCase(imageUri)
+            _recognizedText.value = cashbackCategories.joinToString()
         }
     }
 }
