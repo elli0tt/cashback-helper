@@ -28,8 +28,9 @@ class RecognizeTextUseCaseImpl(
     override suspend fun invoke(imageUri: String): RecognizedText =
         withContext(dispatchersProvider.io) {
             val recognizedText = loadImageBase64(imageUri)?.let { imageBase64 ->
+                val token = yandexCloudAuthRepo.getToken() ?: return@withContext RecognizedText.Failure
                 yandexCloudTextRecognitionApi.recognizeText(
-                    token = yandexCloudAuthRepo.getToken(),
+                    token,
                     RecognizeTextRequestBody(content = imageBase64)
                 ).toRecognizedText()
             } ?: RecognizedText.Failure

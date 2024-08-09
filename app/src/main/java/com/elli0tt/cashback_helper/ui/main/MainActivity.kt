@@ -63,8 +63,10 @@ fun ChoosePhotoScreen(
     }
     val pickPhotoLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-            mainViewModel.recognizeText(uri.toString())
-            imageUri = uri
+            uri?.let {
+                mainViewModel.recognizeText(uri.toString())
+                imageUri = uri
+            }
         }
 
     val recognizedText: String by mainViewModel.recognizedText.collectAsState()

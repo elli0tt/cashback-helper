@@ -88,6 +88,8 @@ dependencies {
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
 
+    implementation(libs.androidx.datastore)
+
     implementation(libs.coil)
 
     implementation(libs.koin.android)
