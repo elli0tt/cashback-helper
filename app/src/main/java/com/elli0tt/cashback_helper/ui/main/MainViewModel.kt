@@ -18,10 +18,17 @@ class MainViewModel(
     private val _cashbackCategories = MutableStateFlow(emptyList<CashbackCategory>())
     val cashbackCategories: StateFlow<List<CashbackCategory>> = _cashbackCategories.asStateFlow()
 
+    private val _cardName = MutableStateFlow("")
+    val cardName: StateFlow<String> = _cardName.asStateFlow()
+
     fun recognizeText(imageUri: String) {
         viewModelScope.launch {
             val cashbackCategories = getCashbackCategoriesFromImageUseCase(imageUri)
             _cashbackCategories.value = cashbackCategories
         }
+    }
+
+    fun onCardNameInputChanged(cardName: String) {
+        _cardName.value = cardName
     }
 }
