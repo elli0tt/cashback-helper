@@ -3,6 +3,7 @@ package com.elli0tt.cashback_helper.data.repo
 import android.util.Log
 import com.elli0tt.cashback_helper.data.database.dao.BankCardsDao
 import com.elli0tt.cashback_helper.data.mapper.toBankCardEntity
+import com.elli0tt.cashback_helper.data.mapper.toBankCardWithCashbackCategoriesView
 import com.elli0tt.cashback_helper.data.mapper.toBankCardsEntitiesList
 import com.elli0tt.cashback_helper.data.mapper.toBankCardsList
 import com.elli0tt.cashback_helper.data.mapper.toBankCardsWithCashbackCategoriesList
@@ -23,6 +24,13 @@ class BankCardsRepoImpl(private val bankCardsDao: BankCardsDao) : BankCardsRepo 
     override suspend fun addBankCards(bankCards: List<BankCard>) {
         Log.d(TAG, "addBankCards(): ${bankCards.joinToString()}")
         bankCardsDao.addBankCards(bankCards.toBankCardsEntitiesList())
+    }
+
+    override suspend fun addBankCardWithCashbackCategories(
+        bankCardWithCashbackCategories: BankCardWithCashbackCategories
+    ) {
+        Log.d(TAG, "addBankCardWithCashbackCategories(): $bankCardWithCashbackCategories")
+//        bankCardsDao.addBankCardWithCashbackCategories(bankCardWithCashbackCategories.toBankCardWithCashbackCategoriesView())
     }
 
     override fun getAllBankCards(): Flow<List<BankCard>> {

@@ -20,5 +20,11 @@ fun BankCardWithCashbackCategoriesView.toBankCardWithCashbackCategories() =
         cashbackCategories = this.cashbackCategoriesEntities.toCashbackCategoriesList()
     )
 
+fun BankCardWithCashbackCategories.toBankCardWithCashbackCategoriesView() =
+    BankCardWithCashbackCategoriesView(
+        bankCardEntity = this.bankCard.toBankCardEntity(),
+        cashbackCategoriesEntities = this.cashbackCategories.toCashbackCategoryEntitiesList()
+    )
+
 fun List<BankCardWithCashbackCategoriesView>.toBankCardsWithCashbackCategoriesList(): List<BankCardWithCashbackCategories> =
     this.map { it.toBankCardWithCashbackCategories() }

@@ -9,6 +9,10 @@ interface BankCardsRepo {
 
     suspend fun addBankCards(bankCards: List<BankCard>)
 
+    suspend fun addBankCardWithCashbackCategories(
+        bankCardWithCashbackCategories: BankCardWithCashbackCategories
+    )
+
     fun getAllBankCards(): Flow<List<BankCard>>
 
     fun getBankCardsWithCashbackCategories(): Flow<List<BankCardWithCashbackCategories>>

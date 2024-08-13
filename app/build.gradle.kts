@@ -35,7 +35,6 @@ android {
         buildConfigField(
             "String",
             "YANDEX_PASSPORT_TOKEN",
-//            "\"y0_AgAAAAAZ6ImQAATuwQAAAAEM87iAAADDlObXmZtMEpkI4TZbSRPmDTIaLQ\""
             keystoreProperties["YANDEX_PASSPORT_TOKEN"].toString()
         )
     }
