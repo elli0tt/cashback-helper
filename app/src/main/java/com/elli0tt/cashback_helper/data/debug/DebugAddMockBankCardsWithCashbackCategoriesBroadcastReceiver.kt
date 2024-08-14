@@ -3,6 +3,7 @@ package com.elli0tt.cashback_helper.data.debug
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import com.elli0tt.cashback_helper.BuildConfig
 import com.elli0tt.cashback_helper.di.CoroutineModule
 import com.elli0tt.cashback_helper.domain.model.BankCard
@@ -25,6 +26,7 @@ class DebugAddMockBankCardsWithCashbackCategoriesBroadcastReceiver :
 
     override fun onReceive(context: Context, intent: Intent) {
         if (BuildConfig.DEBUG) {
+            Log.d(TAG, "onReceive(): DebugAddMockBankCardsWithCashbackCategoriesBroadcastReceiver")
             appScope.launch {
                 generateMockBankCardsWithCashbackCategories().forEach {
                     bankCardsRepo.addBankCardWithCashbackCategories(it)

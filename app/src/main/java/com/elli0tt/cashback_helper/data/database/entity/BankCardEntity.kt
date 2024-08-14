@@ -10,6 +10,6 @@ data class BankCardEntity(@PrimaryKey @ColumnInfo(name = COLUMN_NAME) val name: 
     companion object {
         const val TABLE_NAME = "bank_cards_table"
 
-        const val COLUMN_NAME = "name"
+        const val COLUMN_NAME = "bank_card_name"
     }
 }

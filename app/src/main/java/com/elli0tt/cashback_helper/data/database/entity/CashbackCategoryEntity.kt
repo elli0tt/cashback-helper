@@ -12,7 +12,7 @@ data class CashbackCategoryEntity(
     companion object {
         const val TABLE_NAME = "cashback_categories_table"
 
-        const val COLUMN_NAME = "name"
+        const val COLUMN_NAME = "cashback_category_name"
         const val COLUMN_PERCENT = "percent"
     }
 }

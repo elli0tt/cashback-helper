@@ -2,6 +2,7 @@ package com.elli0tt.cashback_helper
 
 import android.app.Application
 import com.elli0tt.cashback_helper.di.AndroidModule
+import com.elli0tt.cashback_helper.di.CoroutineModule
 import com.elli0tt.cashback_helper.di.DatabaseModule
 import com.elli0tt.cashback_helper.di.NetworkModule
 import org.koin.android.ext.koin.androidContext
@@ -19,6 +20,7 @@ class App: Application() {
             modules(
                 defaultModule,
                 AndroidModule().module,
+                CoroutineModule().module,
                 DatabaseModule().module,
                 NetworkModule().module
             )

@@ -5,9 +5,17 @@ import androidx.room.RoomDatabase
 import com.elli0tt.cashback_helper.data.database.dao.BankCardsDao
 import com.elli0tt.cashback_helper.data.database.dao.CashbackCategoriesDao
 import com.elli0tt.cashback_helper.data.database.entity.BankCardEntity
+import com.elli0tt.cashback_helper.data.database.entity.BankCardCashbackCategoryCrossRef
 import com.elli0tt.cashback_helper.data.database.entity.CashbackCategoryEntity
 
-@Database(entities = [BankCardEntity::class, CashbackCategoryEntity::class], version = 1)
+@Database(
+    entities = [
+        BankCardEntity::class,
+        CashbackCategoryEntity::class,
+        BankCardCashbackCategoryCrossRef::class
+    ],
+    version = 1
+)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract val bankCardsDao: BankCardsDao
