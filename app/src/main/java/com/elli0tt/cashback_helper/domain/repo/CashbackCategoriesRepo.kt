@@ -9,4 +9,6 @@ interface CashbackCategoriesRepo {
     suspend fun addCategories(cashbackCategories: List<CashbackCategory>)
 
     fun getAllCategories(): Flow<List<CashbackCategory>>
+
+    suspend fun getCategoriesCount(): Int
 }

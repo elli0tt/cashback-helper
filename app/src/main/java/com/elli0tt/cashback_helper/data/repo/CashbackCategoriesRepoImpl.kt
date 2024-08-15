@@ -32,6 +32,12 @@ class CashbackCategoriesRepoImpl(
         }
     }
 
+    override suspend fun getCategoriesCount(): Int {
+        val count = cashbackCategoriesDao.getCategoriesCount()
+        Log.d(TAG, "getCategoriesCount(): $count")
+        return count
+    }
+
     companion object {
         private const val TAG = "CashbackCategoriesRepoImpl"
     }

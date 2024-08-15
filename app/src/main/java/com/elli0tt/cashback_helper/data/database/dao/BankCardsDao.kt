@@ -25,6 +25,8 @@ interface BankCardsDao {
     fun getAllBankCards(): Flow<List<BankCardEntity>>
 
     @Transaction
-    @Query("SELECT * FROM ${BankCardEntity.TABLE_NAME}")
+    @Query("SELECT * " +
+            "FROM ${BankCardEntity.TABLE_NAME} " +
+            "ORDER BY ${BankCardEntity.COLUMN_NAME} ASC")
     fun getBankCardsWithCashbackCategories(): Flow<List<BankCardWithCashbackCategoriesView>>
 }

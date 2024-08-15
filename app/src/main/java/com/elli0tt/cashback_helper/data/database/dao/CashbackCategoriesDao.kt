@@ -15,6 +15,11 @@ interface CashbackCategoriesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCategories(cashbackCategoryEntities: List<CashbackCategoryEntity>)
 
-    @Query("SELECT * FROM ${CashbackCategoryEntity.TABLE_NAME}")
+    @Query("SELECT * " +
+            "FROM ${CashbackCategoryEntity.TABLE_NAME} " +
+            "ORDER BY ${CashbackCategoryEntity.COLUMN_NAME} ASC")
     fun getAllCategories(): Flow<List<CashbackCategoryEntity>>
+
+    @Query("SELECT COUNT(*) FROM ${CashbackCategoryEntity.TABLE_NAME}")
+    suspend fun getCategoriesCount(): Int
 }
