@@ -19,9 +19,7 @@ import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
 class MainViewModel(
-    private val getCashbackCategoriesFromImageUseCase: GetCashbackCategoriesFromImageUseCase,
-    private val bankCardsRepo: BankCardsRepo,
-    private val cashbackCategoriesRepo: CashbackCategoriesRepo
+    private val getCashbackCategoriesFromImageUseCase: GetCashbackCategoriesFromImageUseCase
 ) : ViewModel() {
 
     private val _cashbackCategories = MutableStateFlow(emptyList<CashbackCategory>())
@@ -29,32 +27,6 @@ class MainViewModel(
 
     private val _cardName = MutableStateFlow("")
     val cardName: StateFlow<String> = _cardName.asStateFlow()
-
-    val bankCardsNamesList: Flow<List<String>> = bankCardsRepo.getAllBankCards().onlyNames()
-
-    private val cashbackCategoriesList: Flow<List<CashbackCategory>> =
-        cashbackCategoriesRepo.getAllCategories()
-    val cashbackCategoriesNames: Flow<List<String>> = cashbackCategoriesList.onlyNames()
-
-    val cashbackCategoriesTable: Flow<List<List<String>>> =
-        bankCardsRepo.getBankCardsWithCashbackCategories()
-            .combine(cashbackCategoriesList) { bankCardsWithCashbackCategories, allCashbackCategories ->
-
-                val resultTable = mutableListOf<List<String>>()
-
-                repeat(bankCardsWithCashbackCategories.size) { bankCardIndex ->
-                    resultTable += List(size = allCashbackCategories.size) { cashbackCategoryIndex ->
-                        val cashbackCategory = allCashbackCategories[cashbackCategoryIndex]
-                        if (bankCardsWithCashbackCategories[bankCardIndex].cashbackCategories.map { it.name }
-                                .contains(cashbackCategory.name)) {
-                            CashbackPercentFormatter.format(cashbackCategory.percent)
-                        } else {
-                            ""
-                        }
-                    }
-                }
-                resultTable
-            }
 
     fun recognizeText(imageUri: String) {
         viewModelScope.launch {
@@ -66,15 +38,4 @@ class MainViewModel(
     fun onCardNameInputChanged(cardName: String) {
         _cardName.value = cardName
     }
-
-    @JvmName("bankCardsNames")
-    private fun Flow<List<BankCard>>.onlyNames(): Flow<List<String>> = this.map { bankCards ->
-        bankCards.map { bankCard -> bankCard.name }
-    }
-
-    @JvmName("cashbackCategoriesNames")
-    private fun Flow<List<CashbackCategory>>.onlyNames(): Flow<List<String>> =
-        this.map { cashbackCategories ->
-            cashbackCategories.map { cashbackCategory -> cashbackCategory.name }
-        }
 }

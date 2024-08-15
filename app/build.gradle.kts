@@ -89,6 +89,8 @@ dependencies {
 
     implementation(libs.androidx.datastore)
 
+    implementation(libs.androidx.navigation.compose)
+
     implementation(libs.coil)
 
     implementation(libs.koin.android)
