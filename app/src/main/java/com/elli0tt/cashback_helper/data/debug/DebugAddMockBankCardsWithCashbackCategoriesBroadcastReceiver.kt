@@ -3,6 +3,7 @@ package com.elli0tt.cashback_helper.data.debug
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.util.Half.toFloat
 import android.util.Log
 import com.elli0tt.cashback_helper.BuildConfig
 import com.elli0tt.cashback_helper.di.CoroutineModule
@@ -53,7 +54,7 @@ class DebugAddMockBankCardsWithCashbackCategoriesBroadcastReceiver :
         repeat(cashbackCategoriesCount) {
             resultList += CashbackCategory(
                 name = "Category ${Random.nextInt(1, 10)}",
-                percent = Random.nextDouble(1.0, 30.0).toFloat()
+                percent = Random.nextDouble(1.0, 30.0).toInt().toFloat()
             )
         }
         return resultList
