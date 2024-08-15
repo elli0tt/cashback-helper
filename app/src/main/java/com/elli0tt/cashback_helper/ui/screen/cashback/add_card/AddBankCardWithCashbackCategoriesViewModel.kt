@@ -7,9 +7,12 @@ import com.elli0tt.cashback_helper.domain.model.BankCardWithCashbackCategories
 import com.elli0tt.cashback_helper.domain.model.CashbackCategory
 import com.elli0tt.cashback_helper.domain.repo.BankCardsRepo
 import com.elli0tt.cashback_helper.domain.use_case.GetCashbackCategoriesFromImageUseCase
+import com.elli0tt.cashback_helper.domain.utils.CashbackPercentFormatter
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
@@ -20,7 +23,7 @@ class AddBankCardWithCashbackCategoriesViewModel(
 ) : ViewModel() {
 
     private val _cashbackCategories = MutableStateFlow(emptyList<CashbackCategory>())
-    val cashbackCategories: StateFlow<List<CashbackCategory>> = _cashbackCategories.asStateFlow()
+    val cashbackCategories: Flow<List<String>> = _cashbackCategories.formatted()
 
     private val _cardName = MutableStateFlow("")
     val cardName: StateFlow<String> = _cardName.asStateFlow()
@@ -38,8 +41,15 @@ class AddBankCardWithCashbackCategoriesViewModel(
         bankCardsRepo.addBankCardWithCashbackCategories(
             BankCardWithCashbackCategories(
                 bankCard = BankCard(name = cardName.value),
-                cashbackCategories = cashbackCategories.value
+                cashbackCategories = _cashbackCategories.value
             )
         )
     }
+
+    private fun StateFlow<List<CashbackCategory>>.formatted(): Flow<List<String>> =
+        this.map { cashbackCategories ->
+            cashbackCategories.map { category ->
+                "${CashbackPercentFormatter.format(category.percent)} ${category.name}"
+            }
+        }
 }

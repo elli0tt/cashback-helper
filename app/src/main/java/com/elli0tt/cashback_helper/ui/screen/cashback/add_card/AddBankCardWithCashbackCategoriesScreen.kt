@@ -11,9 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -32,7 +30,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.elli0tt.cashback_helper.R
-import com.elli0tt.cashback_helper.domain.model.CashbackCategory
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -51,7 +48,7 @@ fun AddBankCardWithCashbackCategoriesScreen(
             }
         }
     val cardName: String by viewModel.cardName.collectAsState()
-    val cashbackCategories: List<CashbackCategory> by viewModel.cashbackCategories.collectAsState()
+    val cashbackCategories: List<String> by viewModel.cashbackCategories.collectAsState(initial = emptyList())
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(
@@ -86,7 +83,7 @@ fun AddBankCardWithCashbackCategoriesScreen(
             )
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
                 items(cashbackCategories) { cashbackCategory ->
-                    Text(text = "${cashbackCategory.percent}% ${cashbackCategory.name}")
+                    Text(text = cashbackCategory)
                 }
             }
             Button(onClick = {
