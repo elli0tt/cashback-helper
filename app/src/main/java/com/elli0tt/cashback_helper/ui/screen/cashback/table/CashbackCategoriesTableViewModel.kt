@@ -1,4 +1,4 @@
-package com.elli0tt.cashback_helper.ui.cashback.table
+package com.elli0tt.cashback_helper.ui.screen.cashback.table
 
 import androidx.lifecycle.ViewModel
 import com.elli0tt.cashback_helper.domain.model.BankCard

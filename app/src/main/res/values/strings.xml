@@ -3,4 +3,6 @@
 
     <string name="choose_image_button">Choose image</string>
     <string name="card_name_label">Card</string>
+
+    <string name="cashback_categories_table_add_bank_card">Add Bank Card</string>
 </resources>

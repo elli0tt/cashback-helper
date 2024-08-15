@@ -1,4 +1,4 @@
-package com.elli0tt.cashback_helper.ui.cashback.add_card
+package com.elli0tt.cashback_helper.ui.screen.cashback.add_card
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -35,7 +36,6 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun AddBankCardWithCashbackCategoriesScreen(
-    padding: PaddingValues,
     viewModel: AddBankCardWithCashbackCategoriesViewModel = koinViewModel()
 ) {
     var imageUri by remember {
@@ -51,39 +51,41 @@ fun AddBankCardWithCashbackCategoriesScreen(
     val cardName: String by viewModel.cardName.collectAsState()
     val cashbackCategories: List<CashbackCategory> by viewModel.cashbackCategories.collectAsState()
 
-    Column(
-        modifier = Modifier
-            .padding(padding)
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Button(
-            onClick = {
-                pickPhotoLauncher.launch(
-                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                )
-            },
-        ) {
-            Text(text = stringResource(R.string.choose_image_button))
-        }
-        AsyncImage(
-            model = imageUri,
-            contentDescription = null,
+    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+        Column(
             modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth()
-                .height(400.dp)
-                .clip(RoundedCornerShape(12.dp)),
-            contentScale = ContentScale.Inside,
-        )
-        OutlinedTextField(
-            value = cardName,
-            onValueChange = { viewModel.onCardNameInputChanged(cardName = it) },
-            label = { stringResource(R.string.card_name_label) }
-        )
-        LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            items(cashbackCategories) { cashbackCategory ->
-                Text(text = "${cashbackCategory.percent}% ${cashbackCategory.name}")
+                .padding(innerPadding)
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Button(
+                onClick = {
+                    pickPhotoLauncher.launch(
+                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                    )
+                },
+            ) {
+                Text(text = stringResource(R.string.choose_image_button))
+            }
+            AsyncImage(
+                model = imageUri,
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+                    .height(400.dp)
+                    .clip(RoundedCornerShape(12.dp)),
+                contentScale = ContentScale.Inside,
+            )
+            OutlinedTextField(
+                value = cardName,
+                onValueChange = { viewModel.onCardNameInputChanged(cardName = it) },
+                label = { stringResource(R.string.card_name_label) }
+            )
+            LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                items(cashbackCategories) { cashbackCategory ->
+                    Text(text = "${cashbackCategory.percent}% ${cashbackCategory.name}")
+                }
             }
         }
     }

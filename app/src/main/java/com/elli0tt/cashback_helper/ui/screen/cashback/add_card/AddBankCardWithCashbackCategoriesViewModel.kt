@@ -1,4 +1,4 @@
-package com.elli0tt.cashback_helper.ui.cashback.add_card
+package com.elli0tt.cashback_helper.ui.screen.cashback.add_card
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
