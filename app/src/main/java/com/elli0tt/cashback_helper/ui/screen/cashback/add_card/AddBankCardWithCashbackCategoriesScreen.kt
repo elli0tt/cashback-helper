@@ -5,14 +5,15 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -36,6 +37,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun AddBankCardWithCashbackCategoriesScreen(
+    onNavigateBack: () -> Unit,
     viewModel: AddBankCardWithCashbackCategoriesViewModel = koinViewModel()
 ) {
     var imageUri by remember {
@@ -58,12 +60,17 @@ fun AddBankCardWithCashbackCategoriesScreen(
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            OutlinedTextField(
+                value = cardName,
+                onValueChange = { viewModel.onCardNameInputChanged(cardName = it) },
+                label = { Text(text = stringResource(R.string.card_name_label)) }
+            )
             Button(
                 onClick = {
                     pickPhotoLauncher.launch(
                         PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
                     )
-                },
+                }
             ) {
                 Text(text = stringResource(R.string.choose_image_button))
             }
@@ -77,15 +84,16 @@ fun AddBankCardWithCashbackCategoriesScreen(
                     .clip(RoundedCornerShape(12.dp)),
                 contentScale = ContentScale.Inside,
             )
-            OutlinedTextField(
-                value = cardName,
-                onValueChange = { viewModel.onCardNameInputChanged(cardName = it) },
-                label = { stringResource(R.string.card_name_label) }
-            )
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
                 items(cashbackCategories) { cashbackCategory ->
                     Text(text = "${cashbackCategory.percent}% ${cashbackCategory.name}")
                 }
+            }
+            Button(onClick = {
+                viewModel.saveBankCardWithCashbackCategories()
+                onNavigateBack()
+            }) {
+                Text(text = stringResource(R.string.cashback_categories_table_save))
             }
         }
     }

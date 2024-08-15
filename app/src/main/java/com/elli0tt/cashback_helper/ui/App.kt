@@ -5,9 +5,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.elli0tt.cashback_helper.ui.screen.Screens
 import com.elli0tt.cashback_helper.ui.screen.cashback.add_card.AddBankCardWithCashbackCategoriesScreen
 import com.elli0tt.cashback_helper.ui.screen.cashback.table.CashbackCategoriesTableScreen
-import com.elli0tt.cashback_helper.ui.screen.Screens
 import org.koin.androidx.compose.KoinAndroidContext
 
 @Composable
@@ -27,7 +27,9 @@ fun App(
                 )
             }
             composable<Screens.AddBankCardWithCashbackCategories> {
-                AddBankCardWithCashbackCategoriesScreen()
+                AddBankCardWithCashbackCategoriesScreen(
+                    onNavigateBack = { navController.popBackStack() }
+                )
             }
         }
     }
