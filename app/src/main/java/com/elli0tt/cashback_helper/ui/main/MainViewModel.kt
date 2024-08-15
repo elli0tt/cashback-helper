@@ -7,6 +7,7 @@ import com.elli0tt.cashback_helper.domain.model.CashbackCategory
 import com.elli0tt.cashback_helper.domain.repo.BankCardsRepo
 import com.elli0tt.cashback_helper.domain.repo.CashbackCategoriesRepo
 import com.elli0tt.cashback_helper.domain.use_case.GetCashbackCategoriesFromImageUseCase
+import com.elli0tt.cashback_helper.domain.utils.CashbackPercentFormatter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -31,7 +32,8 @@ class MainViewModel(
 
     val bankCardsNamesList: Flow<List<String>> = bankCardsRepo.getAllBankCards().onlyNames()
 
-    private val cashbackCategoriesList: Flow<List<CashbackCategory>> = cashbackCategoriesRepo.getAllCategories()
+    private val cashbackCategoriesList: Flow<List<CashbackCategory>> =
+        cashbackCategoriesRepo.getAllCategories()
     val cashbackCategoriesNames: Flow<List<String>> = cashbackCategoriesList.onlyNames()
 
     val cashbackCategoriesTable: Flow<List<List<String>>> =
@@ -45,28 +47,13 @@ class MainViewModel(
                         val cashbackCategory = allCashbackCategories[cashbackCategoryIndex]
                         if (bankCardsWithCashbackCategories[bankCardIndex].cashbackCategories.map { it.name }
                                 .contains(cashbackCategory.name)) {
-                            cashbackCategory.percent.toString() + "%"
+                            CashbackPercentFormatter.format(cashbackCategory.percent)
                         } else {
                             ""
                         }
                     }
                 }
                 resultTable
-
-//                mutableListOf()
-//            bankCardsRepo.getBankCardsWithCashbackCategories()
-//                .map { bankCardsWithCashbackCategories ->
-//                    val cashbackCategoriesCount = cashbackCategoriesRepo.getCategoriesCount()
-//                    val resultTable =
-//                        ArrayList<List<String>>(initialCapacity = bankCardsWithCashbackCategories.size)
-//
-//                    repeat(bankCardsWithCashbackCategories.size) { bankCardIndex ->
-//                        resultTable += List(size = cashbackCategoriesCount) { cashbackCategoryIndex ->
-//                            ""
-//                        }
-//                    }
-//                    resultTable
-//                }
             }
 
     fun recognizeText(imageUri: String) {
