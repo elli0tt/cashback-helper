@@ -60,7 +60,7 @@ fun AddBankCardWithCashbackCategoriesScreen(
             OutlinedTextField(
                 value = cardName,
                 onValueChange = { viewModel.onCardNameInputChanged(cardName = it) },
-                label = { Text(text = stringResource(R.string.card_name_label)) }
+                label = { Text(text = stringResource(R.string.add_bank_card_with_cashback_categories_card_name_label)) }
             )
             Button(
                 onClick = {
@@ -69,7 +69,7 @@ fun AddBankCardWithCashbackCategoriesScreen(
                     )
                 }
             ) {
-                Text(text = stringResource(R.string.choose_image_button))
+                Text(text = stringResource(R.string.add_bank_card_with_cashback_categories_choose_image_button))
             }
             AsyncImage(
                 model = imageUri,
@@ -90,7 +90,7 @@ fun AddBankCardWithCashbackCategoriesScreen(
                 viewModel.saveBankCardWithCashbackCategories()
                 onNavigateBack()
             }) {
-                Text(text = stringResource(R.string.cashback_categories_table_save))
+                Text(text = stringResource(R.string.cashback_categories_table_save_button_text))
             }
         }
     }

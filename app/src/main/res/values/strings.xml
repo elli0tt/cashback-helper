@@ -1,11 +1,13 @@
 <resources>
     <string name="app_name">Cashback Helper</string>
 
-    <string name="choose_image_button">Choose image</string>
-    <string name="card_name_label">Bank Card</string>
+    <string name="add_bank_card_with_cashback_categories_choose_image_button">Choose image</string>
+    <string name="add_bank_card_with_cashback_categories_card_name_label">Bank Card</string>
 
     <string name="cashback_categories_table_add_bank_card">Add Bank Card</string>
-    <string name="cashback_categories_table_save">Save</string>
+    <string name="cashback_categories_table_save_button_text">Save</string>
 
     <string name="saved_bank_cards_screen_title">Saved Bank Cards</string>
+    <string name="saved_bank_cards_bank_card_label">Bank Card</string>
+    <string name="saved_bank_card_save_button_text">Save</string>
 </resources>
