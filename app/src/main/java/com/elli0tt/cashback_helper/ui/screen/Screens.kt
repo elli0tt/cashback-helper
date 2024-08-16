@@ -8,4 +8,7 @@ sealed class Screens {
 
     @Serializable
     data object CashbackCategoriesTable : Screens()
+
+    @Serializable
+    data object SavedBankCards: Screens()
 }

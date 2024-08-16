@@ -6,4 +6,6 @@
 
     <string name="cashback_categories_table_add_bank_card">Add Bank Card</string>
     <string name="cashback_categories_table_save">Save</string>
+
+    <string name="saved_bank_cards_screen_title">Saved Bank Cards</string>
 </resources>

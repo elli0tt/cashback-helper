@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.elli0tt.cashback_helper.ui.screen.Screens
 import com.elli0tt.cashback_helper.ui.screen.cashback.add_card.AddBankCardWithCashbackCategoriesScreen
+import com.elli0tt.cashback_helper.ui.screen.cashback.saved_cards.SavedBankCardsScreen
 import com.elli0tt.cashback_helper.ui.screen.cashback.table.CashbackCategoriesTableScreen
 import org.koin.androidx.compose.KoinAndroidContext
 
@@ -17,7 +18,7 @@ fun App(
     KoinAndroidContext {
         NavHost(
             navController = navController,
-            startDestination = Screens.CashbackCategoriesTable
+            startDestination = Screens.SavedBankCards
         ) {
             composable<Screens.CashbackCategoriesTable> {
                 CashbackCategoriesTableScreen(
@@ -30,6 +31,9 @@ fun App(
                 AddBankCardWithCashbackCategoriesScreen(
                     onNavigateBack = { navController.popBackStack() }
                 )
+            }
+            composable<Screens.SavedBankCards> {
+                SavedBankCardsScreen()
             }
         }
     }
