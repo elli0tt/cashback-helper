@@ -1,10 +1,25 @@
 package com.elli0tt.cashback_helper.ui
 
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.elli0tt.cashback_helper.R
 import com.elli0tt.cashback_helper.ui.screen.Screens
 import com.elli0tt.cashback_helper.ui.screen.cashback.add_card.AddBankCardWithCashbackCategoriesScreen
 import com.elli0tt.cashback_helper.ui.screen.cashback.saved_cards.SavedBankCardsScreen
@@ -15,27 +30,63 @@ import org.koin.androidx.compose.KoinAndroidContext
 fun App(
     navController: NavHostController = rememberNavController()
 ) {
+    var selectedItemIndex by remember { mutableIntStateOf(0) }
+    val navigationBarItems = listOf(
+        NavigationBarItemState(
+            label = stringResource(R.string.navigation_bar_cashback_categories_label),
+            onClick = { navController.navigate(route = Screens.CashbackCategoriesTable) }
+        ),
+        NavigationBarItemState(
+            label = stringResource(R.string.navigation_bar_bank_cards_label),
+            onClick = { navController.navigate(route = Screens.SavedBankCards) }
+        )
+    )
     KoinAndroidContext {
-        NavHost(
-            navController = navController,
-            startDestination = Screens.SavedBankCards
-        ) {
-            composable<Screens.CashbackCategoriesTable> {
-                CashbackCategoriesTableScreen(
-                    onNavigateToAddBankCardWithCashbackCategories = {
-                        navController.navigate(route = Screens.AddBankCardWithCashbackCategories)
+        Scaffold(
+            bottomBar = {
+                NavigationBar {
+                    navigationBarItems.forEachIndexed { index, navigationBarItemState ->
+                        NavigationBarItem(
+                            selected = index == selectedItemIndex,
+                            onClick = {
+                                navigationBarItemState.onClick()
+                                selectedItemIndex = index
+                            },
+                            icon = {
+                                Icon(
+                                    imageVector = Icons.Filled.AccountBox,
+                                    contentDescription = ""
+                                )
+                            },
+                            label = { Text(text = navigationBarItemState.label) }
+                        )
                     }
-                )
+                }
             }
-            composable<Screens.AddBankCardWithCashbackCategories> {
-                AddBankCardWithCashbackCategoriesScreen(
-                    onNavigateBack = { navController.popBackStack() }
-                )
-            }
-            composable<Screens.SavedBankCards> {
-                SavedBankCardsScreen()
+        ) { innerPadding ->
+            NavHost(
+                navController = navController,
+                startDestination = Screens.CashbackCategoriesTable,
+                Modifier.padding(innerPadding)
+            ) {
+                composable<Screens.CashbackCategoriesTable> {
+                    CashbackCategoriesTableScreen(
+                        onNavigateToAddBankCardWithCashbackCategories = {
+                            navController.navigate(route = Screens.AddBankCardWithCashbackCategories)
+                        }
+                    )
+                }
+                composable<Screens.AddBankCardWithCashbackCategories> {
+                    AddBankCardWithCashbackCategoriesScreen(
+                        onNavigateBack = { navController.popBackStack() }
+                    )
+                }
+                composable<Screens.SavedBankCards> {
+                    SavedBankCardsScreen()
+                }
             }
         }
     }
 }
 
+data class NavigationBarItemState(val label: String, val onClick: () -> Unit)
