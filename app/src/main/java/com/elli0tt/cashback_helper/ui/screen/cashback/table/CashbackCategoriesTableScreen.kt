@@ -31,7 +31,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.elli0tt.cashback_helper.R
 import org.koin.androidx.compose.koinViewModel
-import kotlin.random.Random
 
 @Composable
 fun CashbackCategoriesTableScreen(
@@ -46,7 +45,9 @@ fun CashbackCategoriesTableScreen(
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(
-            modifier = Modifier.padding(innerPadding),
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             if (cashbackCategoriesTable.isNotEmpty()) {
