@@ -39,12 +39,10 @@ fun CashbackCategoriesTableScreen(
     viewModel: CashbackCategoriesTableViewModel = koinViewModel()
 ) {
     val cashbackCategoriesTable: List<List<CashbackCategoryUiState>> by
-    viewModel.cashbackCategoriesTable.collectAsState(initial = emptyList())
+    viewModel.cashbackCategoriesTable.collectAsState()
 
-    val bankCards: List<String> by viewModel.bankCardsNamesList.collectAsState(initial = emptyList())
-    val cashbackCategories: List<String> by viewModel.cashbackCategoriesNames.collectAsState(
-        initial = emptyList()
-    )
+    val bankCards: List<String> by viewModel.bankCardsNamesList.collectAsState()
+    val cashbackCategories: List<String> by viewModel.cashbackCategoriesNames.collectAsState()
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(
@@ -138,9 +136,6 @@ fun Table(
                                     layout(width = maxWidth, height = placeable.height) {
                                         placeable.placeRelative(0, 0)
                                     }
-                                }
-                                .clickable {
-
                                 }
                             ) {
                                 cellContent(columnIndex, rowIndex)

@@ -4,8 +4,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.elli0tt.cashback_helper.domain.mapper.onlyNames
-import com.elli0tt.cashback_helper.domain.model.BankCard
 import com.elli0tt.cashback_helper.domain.model.BankCardCashbackCategoryCrossRef
+import com.elli0tt.cashback_helper.domain.model.BankCardWithCashbackCategories
 import com.elli0tt.cashback_helper.domain.model.CashbackCategory
 import com.elli0tt.cashback_helper.domain.repo.BankCardsRepo
 import com.elli0tt.cashback_helper.domain.repo.CashbackCategoriesRepo
@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
@@ -50,33 +49,44 @@ class CashbackCategoriesTableViewModel(
             bankCardsRepo.getAllBankCardsCashbackCategoriesCrossRefs()
         ) { bankCardsWithCashbackCategories, allCashbackCategories, bankCardsCashbackCategoriesCrossRefs ->
             Log.d(TAG, "cashbackCategoriesTable - update")
-            val resultTable = mutableListOf<List<CashbackCategoryUiState>>()
-
-            repeat(bankCardsWithCashbackCategories.size) { bankCardIndex ->
-                resultTable += List(size = allCashbackCategories.size) { cashbackCategoryIndex ->
-                    val cashbackCategory = allCashbackCategories[cashbackCategoryIndex]
-                    val bankCardWithCashbackCategories =
-                        bankCardsWithCashbackCategories[bankCardIndex]
-                    if (bankCardWithCashbackCategories.cashbackCategories.map { it.name }
-                            .contains(cashbackCategory.name)) {
-                        CashbackCategoryUiState(
-                            name = CashbackPercentFormatter.format(cashbackCategory.percent),
-                            isSelected = bankCardsCashbackCategoriesCrossRefs.find {
-                                it.bankCardName == bankCardWithCashbackCategories.bankCard.name &&
-                                        it.cashbackCategoryName == cashbackCategory.name
-                            }?.isSelected ?: false
-                        )
-                    } else {
-                        CashbackCategoryUiState(name = "", isSelected = false)
-                    }
-                }
-            }
-            resultTable
+            buildCashbackCategoriesTable(
+                bankCardsWithCashbackCategories,
+                allCashbackCategories,
+                bankCardsCashbackCategoriesCrossRefs
+            )
         }.stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(),
             initialValue = emptyList()
         )
+
+    private fun buildCashbackCategoriesTable(
+        bankCardsWithCashbackCategories: List<BankCardWithCashbackCategories>,
+        allCashbackCategories: List<CashbackCategory>,
+        bankCardsCashbackCategoriesCrossRefs: List<BankCardCashbackCategoryCrossRef>
+    ): List<List<CashbackCategoryUiState>> {
+        val resultTable = mutableListOf<List<CashbackCategoryUiState>>()
+
+        repeat(bankCardsWithCashbackCategories.size) { bankCardIndex ->
+            resultTable += List(size = allCashbackCategories.size) { cashbackCategoryIndex ->
+                val cashbackCategory = allCashbackCategories[cashbackCategoryIndex]
+                val bankCardWithCashbackCategories = bankCardsWithCashbackCategories[bankCardIndex]
+                if (bankCardWithCashbackCategories.cashbackCategories.map { it.name }
+                        .contains(cashbackCategory.name)) {
+                    CashbackCategoryUiState(
+                        name = CashbackPercentFormatter.format(cashbackCategory.percent),
+                        isSelected = bankCardsCashbackCategoriesCrossRefs.find {
+                            it.bankCardName == bankCardWithCashbackCategories.bankCard.name &&
+                                    it.cashbackCategoryName == cashbackCategory.name
+                        }?.isSelected ?: false
+                    )
+                } else {
+                    CashbackCategoryUiState(name = "", isSelected = false)
+                }
+            }
+        }
+        return resultTable
+    }
 
     fun selectCashbackCategory(
         bankCardIndex: Int,
