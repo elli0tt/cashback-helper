@@ -78,7 +78,7 @@ fun App(
     }
 }
 
-data class NavigationBarItemState(val label: String, val onClick: () -> Unit)
+private data class NavigationBarItemState(val label: String, val onClick: () -> Unit)
 
 private fun NavGraphBuilder.cashbackCategoriesTableScreen(navController: NavHostController) =
     composable<Screens.CashbackCategoriesTable> {
