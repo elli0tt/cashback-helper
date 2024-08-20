@@ -69,10 +69,8 @@ fun CashbackCategoriesTableScreen(
                                         rowIndex == 0 ||
                                         !cashbackCategoriesTable[columnIndex - 1][rowIndex - 1].isSelected
                                     ) {
-//                                        Color.Green
                                         Color.Transparent
                                     } else {
-//                                        Color.Transparent
                                         Color.Green
                                     }
                                 )
@@ -151,44 +149,6 @@ fun Table(
                     }
 
                     afterRow?.invoke(rowIndex)
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun CustomTable() {
-    val columnsCount = 10
-    Box(
-        modifier = Modifier
-            .padding(16.dp)
-            .fillMaxWidth()
-            .horizontalScroll(rememberScrollState())
-    ) {
-        LazyColumn {
-            items(count = 10) { rowIndex ->
-                Row {
-                    repeat(columnsCount) { columnIndex ->
-                        Text(
-//                    modifier = Modifier
-//                    .border(width = 1.dp, color = Color.Black)
-//                        .fillMaxWidth()
-//                        .padding(4.dp),
-//                    .clickable {
-//
-//                    },
-                            text = run {
-                                when {
-                                    columnIndex == 0 && rowIndex == 0 -> ""
-                                    columnIndex == 0 -> "Cashback category $rowIndex"
-                                    rowIndex == 0 -> "Bank card $columnIndex"
-                                    else -> "${Random.nextInt(from = 1, until = 30)}%"
-                                }
-//                                "1"
-                            }
-                        )
-                    }
                 }
             }
         }

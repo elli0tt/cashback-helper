@@ -92,15 +92,17 @@ class CashbackCategoriesTableViewModel(
         bankCardIndex: Int,
         cashbackCategoryIndex: Int
     ) = viewModelScope.launch {
-        val cashbackCategoryUiState =
-            cashbackCategoriesTable.value[bankCardIndex][cashbackCategoryIndex]
-        bankCardsRepo.selectCashbackCategory(
-            BankCardCashbackCategoryCrossRef(
-                bankCardName = bankCardsNamesList.value[bankCardIndex],
-                cashbackCategoryName = cashbackCategoriesNames.value[cashbackCategoryIndex],
-                isSelected = !cashbackCategoryUiState.isSelected
+        if (bankCardIndex >= 0 && cashbackCategoryIndex >= 0) {
+            val cashbackCategoryUiState =
+                cashbackCategoriesTable.value[bankCardIndex][cashbackCategoryIndex]
+            bankCardsRepo.selectCashbackCategory(
+                BankCardCashbackCategoryCrossRef(
+                    bankCardName = bankCardsNamesList.value[bankCardIndex],
+                    cashbackCategoryName = cashbackCategoriesNames.value[cashbackCategoryIndex],
+                    isSelected = !cashbackCategoryUiState.isSelected
+                )
             )
-        )
+        }
     }
 
     companion object {
