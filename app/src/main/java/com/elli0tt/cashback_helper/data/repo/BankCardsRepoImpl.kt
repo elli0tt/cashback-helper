@@ -3,13 +3,16 @@ package com.elli0tt.cashback_helper.data.repo
 import android.util.Log
 import com.elli0tt.cashback_helper.data.database.dao.BankCardsDao
 import com.elli0tt.cashback_helper.data.database.dao.CashbackCategoriesDao
-import com.elli0tt.cashback_helper.data.database.entity.BankCardCashbackCategoryCrossRef
+import com.elli0tt.cashback_helper.data.database.entity.BankCardCashbackCategoryCrossRefEntity
+import com.elli0tt.cashback_helper.data.mapper.toBankCardCashbackCategoryCrossRefEntity
 import com.elli0tt.cashback_helper.data.mapper.toBankCardEntity
+import com.elli0tt.cashback_helper.data.mapper.toBankCardsCashbackCategoriesCrossRefsList
 import com.elli0tt.cashback_helper.data.mapper.toBankCardsEntitiesList
 import com.elli0tt.cashback_helper.data.mapper.toBankCardsList
 import com.elli0tt.cashback_helper.data.mapper.toBankCardsWithCashbackCategoriesList
 import com.elli0tt.cashback_helper.data.mapper.toCashbackCategoryEntitiesList
 import com.elli0tt.cashback_helper.domain.model.BankCard
+import com.elli0tt.cashback_helper.domain.model.BankCardCashbackCategoryCrossRef
 import com.elli0tt.cashback_helper.domain.model.BankCardWithCashbackCategories
 import com.elli0tt.cashback_helper.domain.repo.BankCardsRepo
 import kotlinx.coroutines.flow.Flow
@@ -41,9 +44,10 @@ class BankCardsRepoImpl(
         )
         bankCardWithCashbackCategories.cashbackCategories.forEach { cashbackCategory ->
             bankCardsDao.insertBankCardCashbackCategoryCrossRef(
-                BankCardCashbackCategoryCrossRef(
+                BankCardCashbackCategoryCrossRefEntity(
                     bankCardName = bankCardWithCashbackCategories.bankCard.name,
-                    cashbackCategoryName = cashbackCategory.name
+                    cashbackCategoryName = cashbackCategory.name,
+                    isSelected = false
                 )
             )
         }
@@ -64,6 +68,26 @@ class BankCardsRepoImpl(
                     "getBankCardsWithCashbackCategories(): size: ${bankCardsWithCashbackCategories.size}"
                 )
                 bankCardsWithCashbackCategories.toBankCardsWithCashbackCategoriesList()
+            }
+    }
+
+    override suspend fun selectCashbackCategory(
+        bankCardCashbackCategoryCrossRef: BankCardCashbackCategoryCrossRef
+    ) {
+        Log.d(TAG, "selectCashbackCategory(): $bankCardCashbackCategoryCrossRef")
+        bankCardsDao.updateBankCardCashbackCategoryCrossRef(
+            bankCardCashbackCategoryCrossRef.toBankCardCashbackCategoryCrossRefEntity()
+        )
+    }
+
+    override fun getAllBankCardsCashbackCategoriesCrossRefs(): Flow<List<BankCardCashbackCategoryCrossRef>> {
+        return bankCardsDao.getAllBankCardsCashbackCategoriesCrossRefs()
+            .map { bankCardsCashbackCategoriesCrossRefs ->
+                Log.d(
+                    TAG,
+                    "getAllBankCardsCashbackCategoriesCrossRefs(): size: ${bankCardsCashbackCategoriesCrossRefs.size}"
+                )
+                bankCardsCashbackCategoriesCrossRefs.toBankCardsCashbackCategoriesCrossRefsList()
             }
     }
 

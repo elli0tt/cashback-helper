@@ -1,6 +1,7 @@
 package com.elli0tt.cashback_helper.domain.repo
 
 import com.elli0tt.cashback_helper.domain.model.BankCard
+import com.elli0tt.cashback_helper.domain.model.BankCardCashbackCategoryCrossRef
 import com.elli0tt.cashback_helper.domain.model.BankCardWithCashbackCategories
 import kotlinx.coroutines.flow.Flow
 
@@ -16,4 +17,10 @@ interface BankCardsRepo {
     fun getAllBankCards(): Flow<List<BankCard>>
 
     fun getBankCardsWithCashbackCategories(): Flow<List<BankCardWithCashbackCategories>>
+
+    suspend fun selectCashbackCategory(
+        bankCardCashbackCategoryCrossRef: BankCardCashbackCategoryCrossRef
+    )
+
+    fun getAllBankCardsCashbackCategoriesCrossRefs(): Flow<List<BankCardCashbackCategoryCrossRef>>
 }

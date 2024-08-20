@@ -1,12 +1,12 @@
 package com.elli0tt.cashback_helper.ui.screen.cashback.table
 
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,6 +23,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layout
@@ -37,19 +38,8 @@ fun CashbackCategoriesTableScreen(
     onNavigateToAddBankCardWithCashbackCategories: () -> Unit,
     viewModel: CashbackCategoriesTableViewModel = koinViewModel()
 ) {
-    val cashbackCategoriesTable: List<List<String>> by
+    val cashbackCategoriesTable: List<List<CashbackCategoryUiState>> by
     viewModel.cashbackCategoriesTable.collectAsState(initial = emptyList())
-//    LazyVerticalGrid(
-//        columns = GridCells.Adaptive(minSize = 10.dp),
-//        modifier = Modifier
-//            .padding(padding)
-//            .fillMaxSize()
-//            .verticalScroll(state = ScrollState(0))
-//    ) {
-//        items(cashbackCategoriesTable) { cashbackCategory ->
-//            Text(text = cashbackCategory)
-//        }
-//    }
 
     val bankCards: List<String> by viewModel.bankCardsNamesList.collectAsState(initial = emptyList())
     val cashbackCategories: List<String> by viewModel.cashbackCategoriesNames.collectAsState(
@@ -57,30 +47,53 @@ fun CashbackCategoriesTableScreen(
     )
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-        Column(modifier = Modifier.padding(innerPadding)) {
-            Table(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth(),
-                rowModifier = Modifier
-                    .border(width = 1.dp, color = Color.Black),
-                columnCount = bankCards.size + 1,
-                rowCount = cashbackCategories.size + 1,
-                cellContent = { columnIndex, rowIndex ->
-                    Text(
-                        modifier = Modifier
-                            .padding(4.dp),
-                        text = run {
-                            when {
-                                columnIndex == 0 && rowIndex == 0 -> ""
-                                columnIndex == 0 -> cashbackCategories[rowIndex - 1]
-                                rowIndex == 0 -> bankCards[columnIndex - 1]
-                                else -> cashbackCategoriesTable[columnIndex - 1][rowIndex - 1]
+        Column(
+            modifier = Modifier.padding(innerPadding),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            if (cashbackCategoriesTable.isNotEmpty()) {
+                Table(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth(),
+                    rowModifier = Modifier
+                        .border(width = 1.dp, color = Color.Black),
+                    columnCount = bankCards.size + 1,
+                    rowCount = cashbackCategories.size + 1,
+                    cellContent = { columnIndex, rowIndex ->
+                        Text(
+                            modifier = Modifier
+                                .padding(4.dp)
+                                .background(
+                                    color = if (columnIndex == 0 ||
+                                        rowIndex == 0 ||
+                                        !cashbackCategoriesTable[columnIndex - 1][rowIndex - 1].isSelected
+                                    ) {
+//                                        Color.Green
+                                        Color.Transparent
+                                    } else {
+//                                        Color.Transparent
+                                        Color.Green
+                                    }
+                                )
+                                .clickable {
+                                    viewModel.selectCashbackCategory(
+                                        bankCardIndex = columnIndex - 1,
+                                        cashbackCategoryIndex = rowIndex - 1
+                                    )
+                                },
+                            text = run {
+                                when {
+                                    columnIndex == 0 && rowIndex == 0 -> ""
+                                    columnIndex == 0 -> cashbackCategories[rowIndex - 1]
+                                    rowIndex == 0 -> bankCards[columnIndex - 1]
+                                    else -> cashbackCategoriesTable[columnIndex - 1][rowIndex - 1].name
+                                }
                             }
-                        }
-                    )
-                }
-            )
+                        )
+                    }
+                )
+            }
 
             Button(
                 onClick = onNavigateToAddBankCardWithCashbackCategories

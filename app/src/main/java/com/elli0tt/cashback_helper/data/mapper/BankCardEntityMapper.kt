@@ -1,8 +1,10 @@
 package com.elli0tt.cashback_helper.data.mapper
 
+import com.elli0tt.cashback_helper.data.database.entity.BankCardCashbackCategoryCrossRefEntity
 import com.elli0tt.cashback_helper.data.database.entity.BankCardEntity
 import com.elli0tt.cashback_helper.data.database.view.BankCardWithCashbackCategoriesView
 import com.elli0tt.cashback_helper.domain.model.BankCard
+import com.elli0tt.cashback_helper.domain.model.BankCardCashbackCategoryCrossRef
 import com.elli0tt.cashback_helper.domain.model.BankCardWithCashbackCategories
 
 fun BankCardEntity.toBankCard() = BankCard(name = this.name)
@@ -28,3 +30,20 @@ fun BankCardWithCashbackCategories.toBankCardWithCashbackCategoriesView() =
 
 fun List<BankCardWithCashbackCategoriesView>.toBankCardsWithCashbackCategoriesList(): List<BankCardWithCashbackCategories> =
     this.map { it.toBankCardWithCashbackCategories() }
+
+fun BankCardCashbackCategoryCrossRef.toBankCardCashbackCategoryCrossRefEntity() =
+    BankCardCashbackCategoryCrossRefEntity(
+        bankCardName = this.bankCardName,
+        cashbackCategoryName = this.cashbackCategoryName,
+        isSelected = this.isSelected
+    )
+
+fun BankCardCashbackCategoryCrossRefEntity.toBankCardCashbackCategoryCrossRef() =
+    BankCardCashbackCategoryCrossRef(
+        bankCardName = this.bankCardName,
+        cashbackCategoryName = this.cashbackCategoryName,
+        isSelected = this.isSelected
+    )
+
+fun List<BankCardCashbackCategoryCrossRefEntity>.toBankCardsCashbackCategoriesCrossRefsList(): List<BankCardCashbackCategoryCrossRef> =
+    this.map { it.toBankCardCashbackCategoryCrossRef() }
