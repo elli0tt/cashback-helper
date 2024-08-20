@@ -3,6 +3,7 @@ package com.elli0tt.cashback_helper.ui.screen.cashback.table
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.elli0tt.cashback_helper.domain.mapper.onlyNames
 import com.elli0tt.cashback_helper.domain.model.BankCard
 import com.elli0tt.cashback_helper.domain.model.BankCardCashbackCategoryCrossRef
 import com.elli0tt.cashback_helper.domain.model.CashbackCategory
@@ -76,17 +77,6 @@ class CashbackCategoriesTableViewModel(
             SharingStarted.WhileSubscribed(),
             initialValue = emptyList()
         )
-
-    @JvmName("bankCardsNames")
-    private fun Flow<List<BankCard>>.onlyNames(): Flow<List<String>> = this.map { bankCards ->
-        bankCards.map { bankCard -> bankCard.name }
-    }
-
-    @JvmName("cashbackCategoriesNames")
-    private fun Flow<List<CashbackCategory>>.onlyNames(): Flow<List<String>> =
-        this.map { cashbackCategories ->
-            cashbackCategories.map { cashbackCategory -> cashbackCategory.name }
-        }
 
     fun selectCashbackCategory(
         bankCardIndex: Int,
