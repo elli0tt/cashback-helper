@@ -4,7 +4,6 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -51,46 +50,51 @@ fun AddBankCardWithCashbackCategoriesScreen(
     val cashbackCategories: List<String> by viewModel.cashbackCategories.collectAsState(initial = emptyList())
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            OutlinedTextField(
-                value = cardName,
-                onValueChange = { viewModel.onCardNameInputChanged(cardName = it) },
-                label = { Text(text = stringResource(R.string.add_bank_card_with_cashback_categories_card_name_label)) }
-            )
-            Button(
-                onClick = {
-                    pickPhotoLauncher.launch(
-                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                    )
+            item {
+                OutlinedTextField(
+                    value = cardName,
+                    onValueChange = { viewModel.onCardNameInputChanged(cardName = it) },
+                    label = { Text(text = stringResource(R.string.add_bank_card_with_cashback_categories_card_name_label)) }
+                )
+                Button(
+                    modifier = Modifier.padding(top = 16.dp),
+                    onClick = {
+                        pickPhotoLauncher.launch(
+                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                        )
+                    }
+                ) {
+                    Text(text = stringResource(R.string.add_bank_card_with_cashback_categories_choose_image_button))
                 }
-            ) {
-                Text(text = stringResource(R.string.add_bank_card_with_cashback_categories_choose_image_button))
+                AsyncImage(
+                    model = imageUri,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth()
+                        .height(400.dp)
+                        .clip(RoundedCornerShape(12.dp)),
+                    contentScale = ContentScale.Inside,
+                )
             }
-            AsyncImage(
-                model = imageUri,
-                contentDescription = null,
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
-                    .height(400.dp)
-                    .clip(RoundedCornerShape(12.dp)),
-                contentScale = ContentScale.Inside,
-            )
-            LazyColumn(modifier = Modifier.fillMaxWidth()) {
-                items(cashbackCategories) { cashbackCategory ->
-                    Text(text = cashbackCategory)
+            items(cashbackCategories) { cashbackCategory ->
+                Text(text = cashbackCategory)
+            }
+            item {
+                Button(
+                    modifier = Modifier.padding(vertical = 16.dp),
+                    onClick = {
+                        viewModel.saveBankCardWithCashbackCategories()
+                        onNavigateBack()
+                    }) {
+                    Text(text = stringResource(R.string.cashback_categories_table_save_button_text))
                 }
-            }
-            Button(onClick = {
-                viewModel.saveBankCardWithCashbackCategories()
-                onNavigateBack()
-            }) {
-                Text(text = stringResource(R.string.cashback_categories_table_save_button_text))
             }
         }
     }
