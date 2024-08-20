@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -69,24 +70,34 @@ fun App(
                 startDestination = Screens.CashbackCategoriesTable,
                 Modifier.padding(innerPadding)
             ) {
-                composable<Screens.CashbackCategoriesTable> {
-                    CashbackCategoriesTableScreen(
-                        onNavigateToAddBankCardWithCashbackCategories = {
-                            navController.navigate(route = Screens.AddBankCardWithCashbackCategories)
-                        }
-                    )
-                }
-                composable<Screens.AddBankCardWithCashbackCategories> {
-                    AddBankCardWithCashbackCategoriesScreen(
-                        onNavigateBack = { navController.popBackStack() }
-                    )
-                }
-                composable<Screens.SavedBankCards> {
-                    SavedBankCardsScreen()
-                }
+                cashbackCategoriesTableScreen(navController)
+                addBankCardWithCashbackCategoriesScreen(navController)
+                savedBankCardsScreen()
             }
         }
     }
 }
 
 data class NavigationBarItemState(val label: String, val onClick: () -> Unit)
+
+private fun NavGraphBuilder.cashbackCategoriesTableScreen(navController: NavHostController) =
+    composable<Screens.CashbackCategoriesTable> {
+        CashbackCategoriesTableScreen(
+            onNavigateToAddBankCardWithCashbackCategories = {
+                navController.navigate(route = Screens.AddBankCardWithCashbackCategories)
+            }
+        )
+    }
+
+private fun NavGraphBuilder.addBankCardWithCashbackCategoriesScreen(
+    navController: NavHostController
+) = composable<Screens.AddBankCardWithCashbackCategories> {
+    AddBankCardWithCashbackCategoriesScreen(
+        onNavigateBack = { navController.popBackStack() }
+    )
+}
+
+private fun NavGraphBuilder.savedBankCardsScreen() =
+    composable<Screens.SavedBankCards> {
+        SavedBankCardsScreen()
+    }
