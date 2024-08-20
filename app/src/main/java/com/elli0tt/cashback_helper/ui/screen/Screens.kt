@@ -11,4 +11,7 @@ sealed class Screens {
 
     @Serializable
     data object SavedBankCards: Screens()
+
+    @Serializable
+    data object DebugActions: Screens()
 }

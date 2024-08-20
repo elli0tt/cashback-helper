@@ -3,6 +3,7 @@ package com.elli0tt.cashback_helper.ui
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.Build
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -14,6 +15,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -23,6 +25,7 @@ import androidx.navigation.compose.rememberNavController
 import com.elli0tt.cashback_helper.R
 import com.elli0tt.cashback_helper.ui.screen.Screens
 import com.elli0tt.cashback_helper.ui.screen.cashback.add_card.AddBankCardWithCashbackCategoriesScreen
+import com.elli0tt.cashback_helper.ui.screen.cashback.debug_actions.DebugActionsScreen
 import com.elli0tt.cashback_helper.ui.screen.cashback.saved_cards.SavedBankCardsScreen
 import com.elli0tt.cashback_helper.ui.screen.cashback.table.CashbackCategoriesTableScreen
 import org.koin.androidx.compose.KoinAndroidContext
@@ -35,11 +38,18 @@ fun App(
     val navigationBarItems = listOf(
         NavigationBarItemState(
             label = stringResource(R.string.navigation_bar_cashback_categories_label),
-            onClick = { navController.navigate(route = Screens.CashbackCategoriesTable) }
+            onClick = { navController.navigate(route = Screens.CashbackCategoriesTable) },
+            icon = Icons.Filled.AccountBox
         ),
         NavigationBarItemState(
             label = stringResource(R.string.navigation_bar_bank_cards_label),
-            onClick = { navController.navigate(route = Screens.SavedBankCards) }
+            onClick = { navController.navigate(route = Screens.SavedBankCards) },
+            icon = Icons.Filled.AccountBox
+        ),
+        NavigationBarItemState(
+            label = "Debug actions",
+            onClick = { navController.navigate(route = Screens.DebugActions) },
+            icon = Icons.Filled.Build
         )
     )
     KoinAndroidContext {
@@ -73,12 +83,17 @@ fun App(
                 cashbackCategoriesTableScreen(navController)
                 addBankCardWithCashbackCategoriesScreen(navController)
                 savedBankCardsScreen()
+                debugActionsScreen()
             }
         }
     }
 }
 
-private data class NavigationBarItemState(val label: String, val onClick: () -> Unit)
+private data class NavigationBarItemState(
+    val label: String,
+    val onClick: () -> Unit,
+    val icon: ImageVector
+)
 
 private fun NavGraphBuilder.cashbackCategoriesTableScreen(navController: NavHostController) =
     composable<Screens.CashbackCategoriesTable> {
@@ -100,4 +115,9 @@ private fun NavGraphBuilder.addBankCardWithCashbackCategoriesScreen(
 private fun NavGraphBuilder.savedBankCardsScreen() =
     composable<Screens.SavedBankCards> {
         SavedBankCardsScreen()
+    }
+
+private fun NavGraphBuilder.debugActionsScreen() =
+    composable<Screens.DebugActions> {
+        DebugActionsScreen()
     }

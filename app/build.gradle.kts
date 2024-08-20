@@ -1,4 +1,5 @@
 import java.io.FileInputStream
+import java.io.FileReader
 import java.util.Properties
 
 plugins {
@@ -29,15 +30,33 @@ android {
             arg("KOIN_CONFIG_CHECK", "true")
         }
 
-        val file = rootProject.file("api.properties")
-        val keystoreProperties = Properties()
-        keystoreProperties.load(FileInputStream(file))
+        val apiProperties = loadProperties("api.properties")
 
         buildConfigField(
-            "String",
-            "YANDEX_PASSPORT_TOKEN",
-            keystoreProperties["YANDEX_PASSPORT_TOKEN"].toString()
+            type = "String",
+            name = "YANDEX_PASSPORT_TOKEN",
+            value = apiProperties["YANDEX_PASSPORT_TOKEN"].toString()
         )
+
+        val predefinedBankCardsProperties = loadProperties("predefined-bank-cards.properties")
+
+        buildConfigField(
+            type = "String[]",
+            name = "PREDEFINED_BANK_CARDS",
+//            value = "{" +
+//                    "${predefinedBankCardsProperties["CARD1"]}," +
+//                    "${predefinedBankCardsProperties["CARD2"]}" +
+//                    "}"
+            //{"CARD1","CARD2"};
+            //"{"NN","aa"}";
+            value = predefinedBankCardsProperties["PREDEFINED_BANK_CARDS"].toString()
+        )
+
+//        buildConfigField(
+//            type = "String",
+//            name = "API_PROPERTIES",
+//            value = apiProperties.toString()
+//        )
     }
 
     buildTypes {
@@ -115,4 +134,11 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+}
+
+private fun loadProperties(fileName: String): Properties {
+    val file = rootProject.file(fileName)
+    val keystoreProperties = Properties()
+    keystoreProperties.load(FileReader(file, Charsets.UTF_16))
+    return keystoreProperties
 }
