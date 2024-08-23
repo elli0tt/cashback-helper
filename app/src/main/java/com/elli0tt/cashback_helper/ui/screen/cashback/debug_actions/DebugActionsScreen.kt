@@ -20,7 +20,7 @@ fun DebugActionsScreen(viewModel: DebugActionsViewModel = koinViewModel()) {
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Button(onClick = { /*TODO*/ }) {
+            Button(onClick = viewModel::addMockBankCardsWithCashbackCategories) {
                 Text(text = "Add mock Bank Cards with Cashback Categories")
             }
             Button(onClick = viewModel::prefillBankCards) {

@@ -5,14 +5,18 @@ import androidx.lifecycle.viewModelScope
 import com.elli0tt.cashback_helper.BuildConfig
 import com.elli0tt.cashback_helper.domain.model.BankCard
 import com.elli0tt.cashback_helper.domain.repo.BankCardsRepo
+import com.elli0tt.cashback_helper.domain.use_case.DebugAddMockBankCardsWithCashbackCategoriesUseCase
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
-class DebugActionsViewModel(private val bankCardsRepo: BankCardsRepo) : ViewModel() {
+class DebugActionsViewModel(
+    private val bankCardsRepo: BankCardsRepo,
+    private val debugAddMockBankCardsWithCashbackCategoriesUseCase: DebugAddMockBankCardsWithCashbackCategoriesUseCase
+) : ViewModel() {
 
-    fun addMockBankCardsWithCashbackCategories() {
-
+    fun addMockBankCardsWithCashbackCategories() = viewModelScope.launch {
+        debugAddMockBankCardsWithCashbackCategoriesUseCase()
     }
 
     fun prefillBankCards() = viewModelScope.launch {

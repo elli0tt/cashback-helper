@@ -1,5 +1,4 @@
 import java.io.FileInputStream
-import java.io.FileReader
 import java.util.Properties
 
 plugins {
@@ -43,20 +42,8 @@ android {
         buildConfigField(
             type = "String[]",
             name = "PREDEFINED_BANK_CARDS",
-//            value = "{" +
-//                    "${predefinedBankCardsProperties["CARD1"]}," +
-//                    "${predefinedBankCardsProperties["CARD2"]}" +
-//                    "}"
-            //{"CARD1","CARD2"};
-            //"{"NN","aa"}";
             value = predefinedBankCardsProperties["PREDEFINED_BANK_CARDS"].toString()
         )
-
-//        buildConfigField(
-//            type = "String",
-//            name = "API_PROPERTIES",
-//            value = apiProperties.toString()
-//        )
     }
 
     buildTypes {
@@ -139,6 +126,6 @@ dependencies {
 private fun loadProperties(fileName: String): Properties {
     val file = rootProject.file(fileName)
     val keystoreProperties = Properties()
-    keystoreProperties.load(FileReader(file, Charsets.UTF_16))
+    keystoreProperties.load(FileInputStream(file))
     return keystoreProperties
 }
