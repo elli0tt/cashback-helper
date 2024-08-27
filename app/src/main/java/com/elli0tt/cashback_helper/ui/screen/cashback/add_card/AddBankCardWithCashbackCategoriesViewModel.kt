@@ -42,13 +42,18 @@ class AddBankCardWithCashbackCategoriesViewModel(
 //    private val _newBankCardName = MutableStateFlow("")
 //    val newBankCardName: StateFlow<String> = _newBankCardName.asStateFlow()
 
+    private val _showLoading = MutableStateFlow(false)
+    val showLoading: StateFlow<Boolean> = _showLoading.asStateFlow()
+
     fun selectBankCard(index: Int) {
         _selectedBankCardIndex.value = index
     }
 
     fun recognizeText(imageUri: String) = viewModelScope.launch {
+        _showLoading.value = true
         val cashbackCategories = getCashbackCategoriesFromImageUseCase(imageUri)
         _cashbackCategories.value = cashbackCategories
+        _showLoading.value = false
     }
 
 //    fun onNewBankCardNameInputChanged(newBankCardName: String) {
@@ -59,12 +64,14 @@ class AddBankCardWithCashbackCategoriesViewModel(
         availableBankCardsNames.value
             .getOrNull(selectedBankCardIndex.value)
             ?.let { selectedBankCardName ->
+                _showLoading.value = true
                 bankCardsRepo.addBankCardWithCashbackCategories(
                     BankCardWithCashbackCategories(
                         bankCard = BankCard(name = selectedBankCardName),
                         cashbackCategories = _cashbackCategories.value
                     )
                 )
+                _showLoading.value = false
             }
     }
 

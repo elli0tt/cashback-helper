@@ -12,6 +12,7 @@ import com.elli0tt.cashback_helper.data.model.YandexPassportToken
 import com.elli0tt.cashback_helper.data.remote.YandexCloudAuthApi
 import com.elli0tt.cashback_helper.domain.repo.YandexCloudAuthRepo
 import org.koin.core.annotation.Single
+import java.time.LocalDateTime
 import kotlin.time.Duration.Companion.hours
 
 @Single
@@ -40,6 +41,7 @@ class YandexCloudAuthRepoImpl(
 
     private suspend fun canUseTokenFromCache(): Boolean {
         val lastUpdateTime = getTokenLastUpdateTimeFromCache()
+        Log.d(TAG, "canUseTokenFromCache(): lastUpdateTime: $lastUpdateTime")
         return lastUpdateTime != null &&
                 (lastUpdateTime - System.currentTimeMillis()) < TOKEN_UPDATE_PERIOD
     }
