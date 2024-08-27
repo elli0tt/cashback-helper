@@ -11,7 +11,7 @@ import kotlin.random.Random
 @Single
 class DebugAddMockBankCardsWithCashbackCategoriesUseCaseImpl(
     private val bankCardsRepo: BankCardsRepo
-): DebugAddMockBankCardsWithCashbackCategoriesUseCase {
+) : DebugAddMockBankCardsWithCashbackCategoriesUseCase {
 
     override suspend operator fun invoke() {
         generateMockBankCardsWithCashbackCategories().forEach {
@@ -19,12 +19,16 @@ class DebugAddMockBankCardsWithCashbackCategoriesUseCaseImpl(
         }
     }
 
-    private fun generateMockBankCardsWithCashbackCategories(): List<BankCardWithCashbackCategories> {
+    private suspend fun generateMockBankCardsWithCashbackCategories(): List<BankCardWithCashbackCategories> {
         val bankCardsCount = 10
         val resultList = mutableListOf<BankCardWithCashbackCategories>()
+        val existingBankCardsCount = bankCardsRepo.getBankCardsCount()
         repeat(bankCardsCount) { index ->
             resultList += BankCardWithCashbackCategories(
-                bankCard = BankCard(name = "Bank Card $index"),
+                bankCard = BankCard(
+                    name = "Bank Card $index",
+                    order = existingBankCardsCount + index
+                ),
                 generateMockCashbackCategories()
             )
         }

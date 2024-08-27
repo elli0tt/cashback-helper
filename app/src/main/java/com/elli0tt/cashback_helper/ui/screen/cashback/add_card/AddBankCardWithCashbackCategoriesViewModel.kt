@@ -25,13 +25,14 @@ class AddBankCardWithCashbackCategoriesViewModel(
     private val bankCardsRepo: BankCardsRepo
 ) : ViewModel() {
 
-    val availableBankCardsNames: StateFlow<List<String>> = bankCardsRepo.getAllBankCards()
-        .onlyNames()
+    private val availableBankCards: StateFlow<List<BankCard>> = bankCardsRepo.getAllBankCards()
         .stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(),
             initialValue = emptyList()
         )
+
+    val availableBankCardsNames: Flow<List<String>> = availableBankCards.onlyNames()
 
     private val _selectedBankCardIndex = MutableStateFlow(0)
     val selectedBankCardIndex: StateFlow<Int> = _selectedBankCardIndex.asStateFlow()
@@ -61,15 +62,12 @@ class AddBankCardWithCashbackCategoriesViewModel(
 //    }
 
     fun saveBankCardWithCashbackCategories() = viewModelScope.launch {
-        availableBankCardsNames.value
+        availableBankCards.value
             .getOrNull(selectedBankCardIndex.value)
-            ?.let { selectedBankCardName ->
+            ?.let { selectedBankCard ->
                 _showLoading.value = true
                 bankCardsRepo.addBankCardWithCashbackCategories(
-                    BankCardWithCashbackCategories(
-                        bankCard = BankCard(name = selectedBankCardName),
-                        cashbackCategories = _cashbackCategories.value
-                    )
+                    BankCardWithCashbackCategories(selectedBankCard, _cashbackCategories.value)
                 )
                 _showLoading.value = false
             }

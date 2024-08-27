@@ -7,9 +7,9 @@ import com.elli0tt.cashback_helper.domain.model.BankCard
 import com.elli0tt.cashback_helper.domain.model.BankCardCashbackCategoryCrossRef
 import com.elli0tt.cashback_helper.domain.model.BankCardWithCashbackCategories
 
-fun BankCardEntity.toBankCard() = BankCard(name = this.name)
+fun BankCardEntity.toBankCard() = BankCard(name = this.name, order = this.order)
 
-fun BankCard.toBankCardEntity() = BankCardEntity(name = this.name)
+fun BankCard.toBankCardEntity() = BankCardEntity(name = this.name, order = this.order)
 
 fun List<BankCardEntity>.toBankCardsList(): List<BankCard> = this.map { it.toBankCard() }
 

@@ -25,6 +25,8 @@ class SavedBankCardsViewModel(private val bankCardsRepo: BankCardsRepo) : ViewMo
     }
 
     fun saveBankCard() = viewModelScope.launch {
-        bankCardsRepo.addBankCard(BankCard(name = bankCardName.value))
+        bankCardsRepo.addBankCard(
+            BankCard(name = bankCardName.value, order = bankCardsRepo.getBankCardsCount())
+        )
     }
 }

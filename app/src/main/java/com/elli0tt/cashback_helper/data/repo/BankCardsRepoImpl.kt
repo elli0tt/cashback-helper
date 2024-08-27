@@ -65,7 +65,8 @@ class BankCardsRepoImpl(
             .map { bankCardsWithCashbackCategories ->
                 Log.d(
                     TAG,
-                    "getBankCardsWithCashbackCategories(): size: ${bankCardsWithCashbackCategories.size}"
+                    "getBankCardsWithCashbackCategories(): " +
+                            "size: ${bankCardsWithCashbackCategories.size}"
                 )
                 bankCardsWithCashbackCategories.toBankCardsWithCashbackCategoriesList()
             }
@@ -85,10 +86,17 @@ class BankCardsRepoImpl(
             .map { bankCardsCashbackCategoriesCrossRefs ->
                 Log.d(
                     TAG,
-                    "getAllBankCardsCashbackCategoriesCrossRefs(): size: ${bankCardsCashbackCategoriesCrossRefs.size}"
+                    "getAllBankCardsCashbackCategoriesCrossRefs(): " +
+                            "size: ${bankCardsCashbackCategoriesCrossRefs.size}"
                 )
                 bankCardsCashbackCategoriesCrossRefs.toBankCardsCashbackCategoriesCrossRefsList()
             }
+    }
+
+    override suspend fun getBankCardsCount(): Int {
+        val count = bankCardsDao.getBankCardsCount()
+        Log.d(TAG, "getBankCardsCount(): $count")
+        return count
     }
 
     companion object {

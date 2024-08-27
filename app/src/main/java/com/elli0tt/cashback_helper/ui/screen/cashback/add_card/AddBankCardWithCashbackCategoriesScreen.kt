@@ -119,7 +119,7 @@ fun AddBankCardWithCashbackCategoriesScreen(
                         modifier = Modifier.padding(vertical = 16.dp),
                         onClick = {
                             viewModel.saveBankCardWithCashbackCategories()
-                                .invokeOnCompletion { onNavigateBack()  }
+                                .invokeOnCompletion { onNavigateBack() }
                         }) {
                         Text(text = stringResource(R.string.cashback_categories_table_save_button_text))
                     }

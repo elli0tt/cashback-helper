@@ -24,7 +24,11 @@ interface BankCardsDao {
         bankCardCashbackCategoryCrossRefEntity: BankCardCashbackCategoryCrossRefEntity
     )
 
-    @Query("SELECT * FROM ${BankCardEntity.TABLE_NAME}")
+    @Query(
+        "SELECT * " +
+                "FROM ${BankCardEntity.TABLE_NAME} " +
+                "ORDER BY ${BankCardEntity.COLUMN_ORDER} ASC"
+    )
     fun getAllBankCards(): Flow<List<BankCardEntity>>
 
     @Transaction
@@ -43,4 +47,7 @@ interface BankCardsDao {
     @Query("SELECT * FROM ${BankCardCashbackCategoryCrossRefEntity.TABLE_NAME}")
     fun getAllBankCardsCashbackCategoriesCrossRefs():
             Flow<List<BankCardCashbackCategoryCrossRefEntity>>
+
+    @Query("SELECT COUNT(*) FROM ${BankCardEntity.TABLE_NAME}")
+    suspend fun getBankCardsCount(): Int
 }

@@ -23,4 +23,6 @@ interface BankCardsRepo {
     )
 
     fun getAllBankCardsCashbackCategoriesCrossRefs(): Flow<List<BankCardCashbackCategoryCrossRef>>
+
+    suspend fun getBankCardsCount(): Int
 }

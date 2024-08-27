@@ -20,9 +20,10 @@ class DebugActionsViewModel(
     }
 
     fun prefillBankCards() = viewModelScope.launch {
+        val existingBankCardsCount = bankCardsRepo.getBankCardsCount()
         bankCardsRepo.addBankCards(
-            BuildConfig.PREDEFINED_BANK_CARDS.map { bankCardName ->
-                BankCard(name = bankCardName)
+            BuildConfig.PREDEFINED_BANK_CARDS.mapIndexed { index, bankCardName ->
+                BankCard(name = bankCardName, existingBankCardsCount + index)
             }
         )
     }
