@@ -12,6 +12,7 @@ composeBom = "2024.04.01"
 room = "2.6.1"
 datastore = "1.1.1"
 navigation = "2.7.7"
+testCoreKtx = "1.6.1"
 
 coil = "2.7.0"
 koin = "4.0.0-RC1"
@@ -41,6 +42,7 @@ androidx-room-compiler = { group = "androidx.room", name = "room-compiler", vers
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 androidx-datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
+androidx-test-core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "testCoreKtx" }
 
 coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 
@@ -64,4 +66,3 @@ jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = 
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "kotlinKsp" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-
