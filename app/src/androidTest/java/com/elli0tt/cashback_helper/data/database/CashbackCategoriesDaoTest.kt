@@ -19,28 +19,6 @@ class CashbackCategoriesDaoTest : BaseDatabaseTest() {
     }
 
     @Test
-    fun checkCategoriesCountWithZeroCategoriesInDatabase() = runTest {
-        Assert.assertEquals(0, cashbackCategoriesDao.getCategoriesCount())
-    }
-
-    @Test
-    fun checkCategoriesCountWithOneCategoryInDatabase() = runTest {
-        cashbackCategoriesDao.insertCategory(CashbackCategoryEntity(name = "cashbackCategory"))
-        Assert.assertEquals(1, cashbackCategoriesDao.getCategoriesCount())
-    }
-
-    @Test
-    fun checkCategoriesCountWithMultipleCategoriesInDatabase() = runTest {
-        val categoriesCount = 5
-        cashbackCategoriesDao.insertCategories(
-            List(categoriesCount) { index ->
-                CashbackCategoryEntity(name = "cashbackCategory $index")
-            }
-        )
-        Assert.assertEquals(categoriesCount, cashbackCategoriesDao.getCategoriesCount())
-    }
-
-    @Test
     fun checkGetAllCategoriesWithZeroCategories() = runTest {
         val cashbackCategoriesDeferred = backgroundScope.async {
             cashbackCategoriesDao.getAllCategories().first()
@@ -79,5 +57,27 @@ class CashbackCategoriesDaoTest : BaseDatabaseTest() {
         val cashbackCategoriesFromDatabase = cashbackCategoriesDeferred.await()
         Assert.assertEquals(categoriesCount, cashbackCategoriesFromDatabase.size)
         Assert.assertEquals(expectedCashbackCategories, cashbackCategoriesFromDatabase)
+    }
+
+    @Test
+    fun checkCategoriesCountWithZeroCategoriesInDatabase() = runTest {
+        Assert.assertEquals(0, cashbackCategoriesDao.getCategoriesCount())
+    }
+
+    @Test
+    fun checkCategoriesCountWithOneCategoryInDatabase() = runTest {
+        cashbackCategoriesDao.insertCategory(CashbackCategoryEntity(name = "cashbackCategory"))
+        Assert.assertEquals(1, cashbackCategoriesDao.getCategoriesCount())
+    }
+
+    @Test
+    fun checkCategoriesCountWithMultipleCategoriesInDatabase() = runTest {
+        val categoriesCount = 5
+        cashbackCategoriesDao.insertCategories(
+            List(categoriesCount) { index ->
+                CashbackCategoryEntity(name = "cashbackCategory $index")
+            }
+        )
+        Assert.assertEquals(categoriesCount, cashbackCategoriesDao.getCategoriesCount())
     }
 }
