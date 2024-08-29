@@ -1,5 +1,6 @@
 package com.elli0tt.cashback_helper.data.database
 
+import com.elli0tt.cashback_helper.data.database.base.BaseDatabaseTest
 import com.elli0tt.cashback_helper.data.database.dao.CashbackCategoriesDao
 import com.elli0tt.cashback_helper.data.database.entity.CashbackCategoryEntity
 import kotlinx.coroutines.async
