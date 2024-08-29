@@ -6,7 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
-import com.elli0tt.cashback_helper.data.database.entity.BankCardCashbackCategoryCrossRefEntity
+import com.elli0tt.cashback_helper.data.database.entity.BankCardCashbackCategoryXRefEntity
 import com.elli0tt.cashback_helper.data.database.entity.BankCardEntity
 import com.elli0tt.cashback_helper.data.database.view.BankCardWithCashbackCategoriesView
 import kotlinx.coroutines.flow.Flow
@@ -17,11 +17,11 @@ interface BankCardsDao {
     suspend fun insertBankCard(bankCardEntity: BankCardEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addBankCards(bankCardsEntities: List<BankCardEntity>)
+    suspend fun insertBankCards(bankCardsEntities: List<BankCardEntity>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertBankCardCashbackCategoryCrossRef(
-        bankCardCashbackCategoryCrossRefEntity: BankCardCashbackCategoryCrossRefEntity
+    suspend fun insertBankCardCashbackCategoryXRef(
+        bankCardCashbackCategoryXRefEntity: BankCardCashbackCategoryXRefEntity
     )
 
     @Query(
@@ -40,13 +40,13 @@ interface BankCardsDao {
     fun getBankCardsWithCashbackCategories(): Flow<List<BankCardWithCashbackCategoriesView>>
 
     @Update
-    suspend fun updateBankCardCashbackCategoryCrossRef(
-        bankCardCashbackCategoryCrossRefEntity: BankCardCashbackCategoryCrossRefEntity
+    suspend fun updateBankCardCashbackCategoryXRef(
+        bankCardCashbackCategoryXRefEntity: BankCardCashbackCategoryXRefEntity
     )
 
-    @Query("SELECT * FROM ${BankCardCashbackCategoryCrossRefEntity.TABLE_NAME}")
-    fun getAllBankCardsCashbackCategoriesCrossRefs():
-            Flow<List<BankCardCashbackCategoryCrossRefEntity>>
+    @Query("SELECT * FROM ${BankCardCashbackCategoryXRefEntity.TABLE_NAME}")
+    fun getAllBankCardsCashbackCategoriesXRefs():
+            Flow<List<BankCardCashbackCategoryXRefEntity>>
 
     @Query("SELECT COUNT(*) FROM ${BankCardEntity.TABLE_NAME}")
     suspend fun getBankCardsCount(): Int
