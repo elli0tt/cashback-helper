@@ -1,33 +1,21 @@
 package com.elli0tt.cashback_helper.data.database
 
-import android.content.Context
-import androidx.room.Room
-import androidx.test.core.app.ApplicationProvider
 import com.elli0tt.cashback_helper.data.database.dao.CashbackCategoriesDao
 import com.elli0tt.cashback_helper.data.database.entity.CashbackCategoryEntity
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
-import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
-class CashbackCategoriesDaoTest {
-    private lateinit var database: AppDatabase
+class CashbackCategoriesDaoTest : BaseDatabaseTest() {
     private lateinit var cashbackCategoriesDao: CashbackCategoriesDao
 
     @Before
-    fun createDatabase() {
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        database = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
+    override fun setup() {
+        super.setup()
         cashbackCategoriesDao = database.cashbackCategoriesDao
-    }
-
-    @After
-    fun closeDatabase() {
-        database.close()
     }
 
     @Test
