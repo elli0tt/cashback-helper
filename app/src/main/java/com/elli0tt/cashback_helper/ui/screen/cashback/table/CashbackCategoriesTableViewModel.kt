@@ -4,11 +4,10 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.elli0tt.cashback_helper.domain.mapper.onlyNames
-import com.elli0tt.cashback_helper.domain.model.BankCardCashbackCategoryCrossRef
-import com.elli0tt.cashback_helper.domain.model.BankCardWithCashbackCategories
+import com.elli0tt.cashback_helper.domain.model.BankCard
+import com.elli0tt.cashback_helper.domain.model.BankCardCashbackCategoryXRef
 import com.elli0tt.cashback_helper.domain.model.CashbackCategory
-import com.elli0tt.cashback_helper.domain.repo.BankCardsRepo
-import com.elli0tt.cashback_helper.domain.repo.CashbackCategoriesRepo
+import com.elli0tt.cashback_helper.domain.repo.BankCardsCashbackCategoriesRepo
 import com.elli0tt.cashback_helper.domain.utils.CashbackPercentFormatter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -20,20 +19,22 @@ import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
 class CashbackCategoriesTableViewModel(
-    private val bankCardsRepo: BankCardsRepo,
-    cashbackCategoriesRepo: CashbackCategoriesRepo
+    private val bankCardsCashbackCategoriesRepo: BankCardsCashbackCategoriesRepo
 ) : ViewModel() {
 
-    val bankCardsNamesList: StateFlow<List<String>> = bankCardsRepo.getAllBankCards()
-        .onlyNames()
-        .stateIn(
-            viewModelScope,
-            SharingStarted.WhileSubscribed(),
-            initialValue = emptyList()
-        )
+    private val bankCardsList: Flow<List<BankCard>> =
+        bankCardsCashbackCategoriesRepo.getAllBankCards()
+    val bankCardsNamesList: StateFlow<List<String>> =
+        bankCardsCashbackCategoriesRepo.getAllBankCards()
+            .onlyNames()
+            .stateIn(
+                viewModelScope,
+                SharingStarted.WhileSubscribed(),
+                initialValue = emptyList()
+            )
 
     private val cashbackCategoriesList: Flow<List<CashbackCategory>> =
-        cashbackCategoriesRepo.getAllCategories()
+        bankCardsCashbackCategoriesRepo.getAllCategories()
     val cashbackCategoriesNames: StateFlow<List<String>> = cashbackCategoriesList
         .onlyNames()
         .stateIn(
@@ -44,9 +45,9 @@ class CashbackCategoriesTableViewModel(
 
     val cashbackCategoriesTable: StateFlow<List<List<CashbackCategoryUiState>>> =
         combine(
-            bankCardsRepo.getBankCardsWithCashbackCategories(),
+            bankCardsList,
             cashbackCategoriesList,
-            bankCardsRepo.getAllBankCardsCashbackCategoriesCrossRefs()
+            bankCardsCashbackCategoriesRepo.getAllBankCardsCashbackCategoriesCrossRefs()
         ) { bankCardsWithCashbackCategories, allCashbackCategories, bankCardsCashbackCategoriesCrossRefs ->
             Log.d(TAG, "cashbackCategoriesTable - update")
             buildCashbackCategoriesTable(
@@ -61,30 +62,50 @@ class CashbackCategoriesTableViewModel(
         )
 
     private fun buildCashbackCategoriesTable(
-        bankCardsWithCashbackCategories: List<BankCardWithCashbackCategories>,
-        allCashbackCategories: List<CashbackCategory>,
-        bankCardsCashbackCategoriesCrossRefs: List<BankCardCashbackCategoryCrossRef>
+        bankCards: List<BankCard>,
+        cashbackCategories: List<CashbackCategory>,
+        bankCardsCashbackCategoriesCrossRefs: List<BankCardCashbackCategoryXRef>
     ): List<List<CashbackCategoryUiState>> {
+        Log.d(
+            TAG,
+            "buildCashbackCategoriesTable(): " +
+                    "bankCards.size: ${bankCards.size}, " +
+                    "cashbackCategories.size: ${cashbackCategories.size}"
+        )
         val resultTable = mutableListOf<List<CashbackCategoryUiState>>()
 
-        repeat(bankCardsWithCashbackCategories.size) { bankCardIndex ->
-            resultTable += List(size = allCashbackCategories.size) { cashbackCategoryIndex ->
-                val cashbackCategory = allCashbackCategories[cashbackCategoryIndex]
-                val bankCardWithCashbackCategories = bankCardsWithCashbackCategories[bankCardIndex]
-                if (bankCardWithCashbackCategories.cashbackCategories.map { it.name }
-                        .contains(cashbackCategory.name)) {
-                    CashbackCategoryUiState(
-                        name = CashbackPercentFormatter.format(cashbackCategory.percent),
-                        isSelected = bankCardsCashbackCategoriesCrossRefs.find {
-                            it.bankCardName == bankCardWithCashbackCategories.bankCard.name &&
-                                    it.cashbackCategoryName == cashbackCategory.name
-                        }?.isSelected ?: false
-                    )
-                } else {
-                    CashbackCategoryUiState(name = "", isSelected = false)
+        bankCards.forEach { bankCard ->
+            resultTable += cashbackCategories.map { cashbackCategory ->
+                val crossRef = bankCardsCashbackCategoriesCrossRefs.find { crossRef ->
+                    crossRef.bankCardName == bankCard.name &&
+                            crossRef.cashbackCategoryName == cashbackCategory.name
                 }
+                CashbackCategoryUiState(
+                    name = crossRef?.let { CashbackPercentFormatter.format(crossRef.percent) }
+                        ?: "",
+                    isSelected = crossRef?.isSelected ?: false
+                )
             }
         }
+//        repeat(allBankCards.size) { bankCardIndex ->
+//            resultTable += List(size = allCashbackCategories.size) { cashbackCategoryIndex ->
+//                val cashbackCategory = allCashbackCategories[cashbackCategoryIndex]
+//                val bankCardWithCashbackCategories = allBankCards[bankCardIndex]
+//                if (bankCardWithCashbackCategories.cashbackCategories.map { it.name }
+//                        .contains(cashbackCategory.name)) {
+//                    CashbackCategoryUiState(
+////                        name = CashbackPercentFormatter.format(cashbackCategory.percent),
+//                        name = "stuuuuuuub",
+//                        isSelected = bankCardsCashbackCategoriesCrossRefs.find {
+//                            it.bankCardName == bankCardWithCashbackCategories.bankCard.name &&
+//                                    it.cashbackCategoryName == cashbackCategory.name
+//                        }?.isSelected ?: false
+//                    )
+//                } else {
+//                    CashbackCategoryUiState(name = "", isSelected = false)
+//                }
+//            }
+//        }
         return resultTable
     }
 
@@ -95,11 +116,12 @@ class CashbackCategoriesTableViewModel(
         if (bankCardIndex >= 0 && cashbackCategoryIndex >= 0) {
             val cashbackCategoryUiState =
                 cashbackCategoriesTable.value[bankCardIndex][cashbackCategoryIndex]
-            bankCardsRepo.selectCashbackCategory(
-                BankCardCashbackCategoryCrossRef(
+            bankCardsCashbackCategoriesRepo.selectCashbackCategory(
+                BankCardCashbackCategoryXRef(
                     bankCardName = bankCardsNamesList.value[bankCardIndex],
                     cashbackCategoryName = cashbackCategoriesNames.value[cashbackCategoryIndex],
-                    isSelected = !cashbackCategoryUiState.isSelected
+                    isSelected = !cashbackCategoryUiState.isSelected,
+                    percent = -100f
                 )
             )
         }

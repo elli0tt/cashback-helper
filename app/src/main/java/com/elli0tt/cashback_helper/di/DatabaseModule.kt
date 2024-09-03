@@ -3,8 +3,7 @@ package com.elli0tt.cashback_helper.di
 import android.content.Context
 import androidx.room.Room
 import com.elli0tt.cashback_helper.data.database.AppDatabase
-import com.elli0tt.cashback_helper.data.database.dao.BankCardsDao
-import com.elli0tt.cashback_helper.data.database.dao.CashbackCategoriesDao
+import com.elli0tt.cashback_helper.data.database.dao.BankCardsCashbackCategoriesDao
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Single
 
@@ -17,9 +16,6 @@ class DatabaseModule {
         .build()
 
     @Single
-    fun bankCardsDao(appDatabase: AppDatabase): BankCardsDao = appDatabase.bankCardsDao
-
-    @Single
-    fun cashbackCategoryDao(appDatabase: AppDatabase): CashbackCategoriesDao =
-        appDatabase.cashbackCategoriesDao
+    fun bankCardsCashbackCategoriesDao(database: AppDatabase): BankCardsCashbackCategoriesDao =
+        database.getBankCardsCashbackCategoriesDao()
 }

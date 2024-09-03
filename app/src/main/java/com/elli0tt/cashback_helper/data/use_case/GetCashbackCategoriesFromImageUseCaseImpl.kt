@@ -29,10 +29,10 @@ class GetCashbackCategoriesFromImageUseCaseImpl(
             .map { categoryString ->
                 CashbackCategory(
                     name = categoryString.substringAfter("%").trim(),
-                    percent = categoryString.substringBefore("%")
-                        .trim()
-                        .replace(',', '.')
-                        .toFloat()
+//                    percent = categoryString.substringBefore("%")
+//                        .trim()
+//                        .replace(',', '.')
+//                        .toFloat()
                 )
             }
     }

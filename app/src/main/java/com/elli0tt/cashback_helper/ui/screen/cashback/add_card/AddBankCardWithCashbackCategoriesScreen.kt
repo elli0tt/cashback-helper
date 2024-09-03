@@ -39,9 +39,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.elli0tt.cashback_helper.R
+import com.elli0tt.cashback_helper.ui.common.FullscreenLoading
 import org.koin.androidx.compose.koinViewModel
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AddBankCardWithCashbackCategoriesScreen(
     onNavigateBack: () -> Unit,
@@ -127,17 +127,7 @@ fun AddBankCardWithCashbackCategoriesScreen(
             }
 
             if (showLoading) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .pointerInteropFilter { true }
-                        .background(
-                            color = colorResource(R.color.fullscreen_progress_back_background)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator(modifier = Modifier.width(64.dp))
-                }
+                FullscreenLoading()
             }
         }
     }

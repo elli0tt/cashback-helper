@@ -27,6 +27,7 @@ import com.elli0tt.cashback_helper.ui.screen.Screens
 import com.elli0tt.cashback_helper.ui.screen.cashback.add_card.AddBankCardWithCashbackCategoriesScreen
 import com.elli0tt.cashback_helper.ui.screen.cashback.debug_actions.DebugActionsScreen
 import com.elli0tt.cashback_helper.ui.screen.cashback.saved_cards.SavedBankCardsScreen
+import com.elli0tt.cashback_helper.ui.screen.cashback.selected_categories.SelectedCashbackCategoriesRoute
 import com.elli0tt.cashback_helper.ui.screen.cashback.table.CashbackCategoriesTableScreen
 import org.koin.androidx.compose.KoinAndroidContext
 
@@ -39,6 +40,11 @@ fun App(
         NavigationBarItemState(
             label = stringResource(R.string.navigation_bar_cashback_categories_label),
             onClick = { navController.navigate(route = Screens.CashbackCategoriesTable) },
+            icon = Icons.Filled.AccountBox
+        ),
+        NavigationBarItemState(
+            label = stringResource(R.string.navigation_bar_selected_cashback_categories_label),
+            onClick = { navController.navigate(route = Screens.SelectedCashbackCategories) },
             icon = Icons.Filled.AccountBox
         ),
         NavigationBarItemState(
@@ -65,7 +71,7 @@ fun App(
                             },
                             icon = {
                                 Icon(
-                                    imageVector = Icons.Filled.AccountBox,
+                                    imageVector = navigationBarItemState.icon,
                                     contentDescription = ""
                                 )
                             },
@@ -84,6 +90,7 @@ fun App(
                 addBankCardWithCashbackCategoriesScreen(navController)
                 savedBankCardsScreen()
                 debugActionsScreen()
+                selectedCashbackCategoriesScreen()
             }
         }
     }
@@ -120,4 +127,9 @@ private fun NavGraphBuilder.savedBankCardsScreen() =
 private fun NavGraphBuilder.debugActionsScreen() =
     composable<Screens.DebugActions> {
         DebugActionsScreen()
+    }
+
+private fun NavGraphBuilder.selectedCashbackCategoriesScreen() =
+    composable<Screens.SelectedCashbackCategories> {
+        SelectedCashbackCategoriesRoute()
     }

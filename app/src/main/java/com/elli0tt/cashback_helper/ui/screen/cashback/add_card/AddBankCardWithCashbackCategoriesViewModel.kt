@@ -6,9 +6,8 @@ import com.elli0tt.cashback_helper.domain.mapper.onlyNames
 import com.elli0tt.cashback_helper.domain.model.BankCard
 import com.elli0tt.cashback_helper.domain.model.BankCardWithCashbackCategories
 import com.elli0tt.cashback_helper.domain.model.CashbackCategory
-import com.elli0tt.cashback_helper.domain.repo.BankCardsRepo
+import com.elli0tt.cashback_helper.domain.repo.BankCardsCashbackCategoriesRepo
 import com.elli0tt.cashback_helper.domain.use_case.GetCashbackCategoriesFromImageUseCase
-import com.elli0tt.cashback_helper.domain.utils.CashbackPercentFormatter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -22,10 +21,10 @@ import org.koin.android.annotation.KoinViewModel
 @KoinViewModel
 class AddBankCardWithCashbackCategoriesViewModel(
     private val getCashbackCategoriesFromImageUseCase: GetCashbackCategoriesFromImageUseCase,
-    private val bankCardsRepo: BankCardsRepo
+    private val bankCardsCashbackCategoriesRepo: BankCardsCashbackCategoriesRepo
 ) : ViewModel() {
 
-    private val availableBankCards: StateFlow<List<BankCard>> = bankCardsRepo.getAllBankCards()
+    private val availableBankCards: StateFlow<List<BankCard>> = bankCardsCashbackCategoriesRepo.getAllBankCards()
         .stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(),
@@ -66,8 +65,9 @@ class AddBankCardWithCashbackCategoriesViewModel(
             .getOrNull(selectedBankCardIndex.value)
             ?.let { selectedBankCard ->
                 _showLoading.value = true
-                bankCardsRepo.addBankCardWithCashbackCategories(
-                    BankCardWithCashbackCategories(selectedBankCard, _cashbackCategories.value)
+                bankCardsCashbackCategoriesRepo.addBankCardWithCashbackCategories(
+//                    BankCardWithCashbackCategories(selectedBankCard, _cashbackCategories.value)
+                    BankCardWithCashbackCategories(selectedBankCard, emptyList())
                 )
                 _showLoading.value = false
             }
@@ -76,7 +76,8 @@ class AddBankCardWithCashbackCategoriesViewModel(
     private fun StateFlow<List<CashbackCategory>>.formatted(): Flow<List<String>> =
         this.map { cashbackCategories ->
             cashbackCategories.map { category ->
-                "${CashbackPercentFormatter.format(category.percent)} ${category.name}"
+                ""
+//                "${CashbackPercentFormatter.format(category.percent)} ${category.name}"
             }
         }
 }

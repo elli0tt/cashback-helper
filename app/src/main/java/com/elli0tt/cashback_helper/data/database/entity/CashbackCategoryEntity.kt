@@ -6,13 +6,11 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = CashbackCategoryEntity.TABLE_NAME)
 data class CashbackCategoryEntity(
-    @PrimaryKey @ColumnInfo(name = COLUMN_NAME) val name: String,
-    @ColumnInfo(name = COLUMN_PERCENT) val percent: Float
+    @PrimaryKey @ColumnInfo(name = COLUMN_NAME) val name: String
 ) {
     companion object {
         const val TABLE_NAME = "cashback_categories_table"
 
         const val COLUMN_NAME = "cashback_category_name"
-        const val COLUMN_PERCENT = "percent"
     }
 }

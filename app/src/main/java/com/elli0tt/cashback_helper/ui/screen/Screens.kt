@@ -14,4 +14,7 @@ sealed class Screens {
 
     @Serializable
     data object DebugActions: Screens()
+
+    @Serializable
+    data object SelectedCashbackCategories: Screens()
 }

@@ -3,7 +3,6 @@ package com.elli0tt.cashback_helper.data.database.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.elli0tt.cashback_helper.data.database.entity.CashbackCategoryEntity.Companion.COLUMN_NAME
 
 @Entity(tableName = BankCardEntity.TABLE_NAME)
 data class BankCardEntity(
