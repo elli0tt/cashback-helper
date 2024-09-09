@@ -15,6 +15,7 @@ import com.elli0tt.cashback_helper.domain.model.BankCard
 import com.elli0tt.cashback_helper.domain.model.BankCardCashbackCategoryXRef
 import com.elli0tt.cashback_helper.domain.model.BankCardWithCashbackCategories
 import com.elli0tt.cashback_helper.domain.model.CashbackCategory
+import com.elli0tt.cashback_helper.domain.model.CashbackCategoryWithBankCards
 import com.elli0tt.cashback_helper.domain.repo.BankCardsCashbackCategoriesRepo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -102,6 +103,32 @@ class BankCardsCashbackCategoriesRepoImpl(
                 bankCardsCashbackCategoriesCrossRefs.toBankCardsCashbackCategoriesCrossRefsList()
             }
     }
+
+    override fun getSelectedCashbackCategoriesWithBankCards(): Flow<List<CashbackCategoryWithBankCards>> =
+        bankCardsCashbackCategoriesDao.getSelectedCashbackCategoriesWithBankCards()
+            .map { bankCardCashbackCategoryViews ->
+                val cashbackCategoriesMap =
+                    mutableMapOf<String, MutableList<CashbackCategoryWithBankCards.BankCard>>()
+                bankCardCashbackCategoryViews.forEach { (bankCardName, cashbackCategoryName, percent) ->
+                    val bankCard = CashbackCategoryWithBankCards.BankCard(bankCardName, percent)
+                    if (cashbackCategoryName in cashbackCategoriesMap) {
+                        cashbackCategoriesMap[cashbackCategoryName]!! += bankCard
+                    } else {
+                        cashbackCategoriesMap[cashbackCategoryName] = mutableListOf(bankCard)
+                    }
+                }
+                val resultList = cashbackCategoriesMap.map { (cashbackCategoryName, bankCards) ->
+                    CashbackCategoryWithBankCards(cashbackCategoryName, bankCards)
+                }
+
+                Log.d(
+                    TAG,
+                    "getSelectedCashbackCategoriesWithBankCards(): " +
+                            "bankCardCashbackCategoryViews.size: ${bankCardCashbackCategoryViews.size}," +
+                            "resultList.size: ${resultList.size}"
+                )
+                resultList
+            }
 
     override suspend fun getCategoriesCount(): Int {
         val count = bankCardsCashbackCategoriesDao.getCategoriesCount()

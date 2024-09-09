@@ -8,6 +8,8 @@ import androidx.room.Update
 import com.elli0tt.cashback_helper.data.database.entity.BankCardCashbackCategoryXRefEntity
 import com.elli0tt.cashback_helper.data.database.entity.BankCardEntity
 import com.elli0tt.cashback_helper.data.database.entity.CashbackCategoryEntity
+import com.elli0tt.cashback_helper.data.database.view.BankCardCashbackCategoryView
+import com.elli0tt.cashback_helper.domain.model.CashbackCategoryWithBankCards
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -109,6 +111,15 @@ abstract class BankCardsCashbackCategoriesDao {
     @Query("SELECT * FROM ${BankCardCashbackCategoryXRefEntity.TABLE_NAME}")
     abstract fun getAllCardsCategoriesXRefs():
             Flow<List<BankCardCashbackCategoryXRefEntity>>
+
+    @Query(
+        "SELECT ${BankCardEntity.COLUMN_NAME} as bankCardName, " +
+                "${CashbackCategoryEntity.COLUMN_NAME} as cashbackCategoryName, " +
+                "${BankCardCashbackCategoryXRefEntity.COLUMN_PERCENT} " +
+                "FROM ${BankCardCashbackCategoryXRefEntity.TABLE_NAME} " +
+                "WHERE ${BankCardCashbackCategoryXRefEntity.COLUMN_IS_SELECTED} = 1"
+    )
+    abstract fun getSelectedCashbackCategoriesWithBankCards(): Flow<List<BankCardCashbackCategoryView>>
 
     @Query("SELECT COUNT(*) FROM ${CashbackCategoryEntity.TABLE_NAME}")
     abstract suspend fun getCategoriesCount(): Int
