@@ -143,11 +143,21 @@ class BankCardsCashbackCategoriesRepoImpl(
     }
 
     override suspend fun selectCashbackCategory(
-        bankCardCashbackCategoryXRef: BankCardCashbackCategoryXRef
+        bankCardName: String,
+        cashbackCategoryName: String,
+        isSelected: Boolean
     ) {
-        Log.d(TAG, "selectCashbackCategory(): $bankCardCashbackCategoryXRef")
-        bankCardsCashbackCategoriesDao.updateCardCategoryXRef(
-            bankCardCashbackCategoryXRef.toBankCardCashbackCategoryCrossRefEntity()
+        Log.d(
+            TAG,
+            "selectCashbackCategory(): " +
+                    "bankCardName: $bankCardName, " +
+                    "cashbackCategoryName: $cashbackCategoryName, " +
+                    "isSelected: $isSelected"
+        )
+        bankCardsCashbackCategoriesDao.selectCashbackCategory(
+            bankCardName,
+            cashbackCategoryName,
+            isSelected
         )
     }
 

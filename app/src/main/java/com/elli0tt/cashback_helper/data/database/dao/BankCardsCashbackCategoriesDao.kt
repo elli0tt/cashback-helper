@@ -9,7 +9,6 @@ import com.elli0tt.cashback_helper.data.database.entity.BankCardCashbackCategory
 import com.elli0tt.cashback_helper.data.database.entity.BankCardEntity
 import com.elli0tt.cashback_helper.data.database.entity.CashbackCategoryEntity
 import com.elli0tt.cashback_helper.data.database.view.BankCardCashbackCategoryView
-import com.elli0tt.cashback_helper.domain.model.CashbackCategoryWithBankCards
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -30,7 +29,7 @@ abstract class BankCardsCashbackCategoriesDao {
     abstract suspend fun insertCardCategoryXRef(
         bankCardCashbackCategoryXRef: BankCardCashbackCategoryXRefEntity
     )
-    
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun insertCardsCategoriesXRefs(
         bankCardsCashbackCategoriesXRefs: List<BankCardCashbackCategoryXRefEntity>
@@ -57,6 +56,18 @@ abstract class BankCardsCashbackCategoriesDao {
     @Update
     abstract suspend fun updateCardCategoryXRef(
         bankCardCashbackCategoryXRefEntity: BankCardCashbackCategoryXRefEntity
+    )
+
+    @Query(
+        "UPDATE ${BankCardCashbackCategoryXRefEntity.TABLE_NAME} " +
+                "SET ${BankCardCashbackCategoryXRefEntity.COLUMN_IS_SELECTED} = :isSelected " +
+                "WHERE ${BankCardEntity.COLUMN_NAME} = :bankCardName AND " +
+                "${CashbackCategoryEntity.COLUMN_NAME} = :cashbackCategoryName"
+    )
+    abstract suspend fun selectCashbackCategory(
+        bankCardName: String,
+        cashbackCategoryName: String,
+        isSelected: Boolean
     )
 
     @Query(

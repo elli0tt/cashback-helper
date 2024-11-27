@@ -117,12 +117,9 @@ class CashbackCategoriesTableViewModel(
             val cashbackCategoryUiState =
                 cashbackCategoriesTable.value[bankCardIndex][cashbackCategoryIndex]
             bankCardsCashbackCategoriesRepo.selectCashbackCategory(
-                BankCardCashbackCategoryXRef(
-                    bankCardName = bankCardsNamesList.value[bankCardIndex],
-                    cashbackCategoryName = cashbackCategoriesNames.value[cashbackCategoryIndex],
-                    isSelected = !cashbackCategoryUiState.isSelected,
-                    percent = -100f
-                )
+                bankCardName = bankCardsNamesList.value[bankCardIndex],
+                cashbackCategoryName = cashbackCategoriesNames.value[cashbackCategoryIndex],
+                isSelected = !cashbackCategoryUiState.isSelected
             )
         }
     }

@@ -36,6 +36,8 @@ interface BankCardsCashbackCategoriesRepo {
     suspend fun getBankCardsCount(): Int
 
     suspend fun selectCashbackCategory(
-        bankCardCashbackCategoryXRef: BankCardCashbackCategoryXRef
+        bankCardName: String,
+        cashbackCategoryName: String,
+        isSelected: Boolean
     )
 }
