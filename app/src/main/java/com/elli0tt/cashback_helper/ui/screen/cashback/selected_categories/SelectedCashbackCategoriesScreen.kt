@@ -1,6 +1,6 @@
 package com.elli0tt.cashback_helper.ui.screen.cashback.selected_categories
 
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,6 +13,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.elli0tt.cashback_helper.ui.common.FullscreenLoading
 import com.elli0tt.cashback_helper.ui.theme.CashbackHelperTheme
 import org.koin.androidx.compose.koinViewModel
@@ -42,9 +44,19 @@ private fun SelectedCashbackCategoriesScreen(
                         .fillMaxSize()
                 ) {
                     items(uiState.cashbackCategories) { cashbackCategoryWithBankCards ->
-                        Row(modifier = Modifier.fillMaxWidth()) {
-                            Text(text = cashbackCategoryWithBankCards.name)
-                            Text(text = cashbackCategoryWithBankCards.bankCards.joinToString())
+                        Column(
+                            modifier = Modifier
+                                .padding(vertical = 8.dp, horizontal = 16.dp)
+                                .fillMaxWidth()
+                        ) {
+                            Text(
+                                text = cashbackCategoryWithBankCards.name,
+                                fontSize = 20.sp
+                            )
+                            Text(
+                                text = cashbackCategoryWithBankCards.bankCards
+                                    .joinToString(separator = "\n")
+                            )
                         }
                     }
                 }
