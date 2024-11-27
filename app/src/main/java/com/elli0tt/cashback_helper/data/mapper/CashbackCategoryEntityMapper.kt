@@ -3,11 +3,13 @@ package com.elli0tt.cashback_helper.data.mapper
 import com.elli0tt.cashback_helper.data.database.entity.CashbackCategoryEntity
 import com.elli0tt.cashback_helper.domain.model.BankCardWithCashbackCategories
 import com.elli0tt.cashback_helper.domain.model.CashbackCategory
+import com.elli0tt.cashback_helper.domain.model.CashbackCategoryWithPercent
 
-fun CashbackCategoryEntity.toCashbackCategory() =
-    CashbackCategory(name = this.name)
+fun CashbackCategoryEntity.toCashbackCategory() = CashbackCategory(name = this.name)
 
-fun CashbackCategory.toCashbackCategoryEntity() =
+fun CashbackCategory.toCashbackCategoryEntity() = CashbackCategoryEntity(name = this.name)
+
+fun CashbackCategoryWithPercent.toCashbackCategoryEntity() =
     CashbackCategoryEntity(name = this.name)
 
 fun List<CashbackCategoryEntity>.toCashbackCategoriesList(): List<CashbackCategory> =
@@ -17,11 +19,8 @@ fun List<CashbackCategoryEntity>.toCashbackCategoriesList(): List<CashbackCatego
 fun List<CashbackCategory>.toCashbackCategoryEntitiesList(): List<CashbackCategoryEntity> =
     this.map { it.toCashbackCategoryEntity() }
 
-fun BankCardWithCashbackCategories.CashbackCategory.toCashbackCategoryEntity() =
-    CashbackCategoryEntity(name = this.name)
-
 @JvmName("bankCardWithCashbackCategoriesCashbackCategoryListToCashbackCategoryEntitiesList")
-fun List<BankCardWithCashbackCategories.CashbackCategory>.toCashbackCategoryEntitiesList(): List<CashbackCategoryEntity> =
+fun List<CashbackCategoryWithPercent>.toCashbackCategoryEntitiesList(): List<CashbackCategoryEntity> =
     this.map { it.toCashbackCategoryEntity() }
 
 //fun CashbackCategoryWithBankCardsView.toCashbackCategoryWithBankCards() =
