@@ -13,9 +13,12 @@ import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
-class SavedBankCardsViewModel(private val bankCardsCashbackCategoriesRepo: BankCardsCashbackCategoriesRepo) : ViewModel() {
+class SavedBankCardsViewModel(
+    private val bankCardsCashbackCategoriesRepo: BankCardsCashbackCategoriesRepo
+) : ViewModel() {
 
-    val bankCardsList: Flow<List<String>> = bankCardsCashbackCategoriesRepo.getAllBankCards().onlyNames()
+    val bankCardsList: Flow<List<String>> =
+        bankCardsCashbackCategoriesRepo.getAllBankCards().onlyNames()
 
     private val _bankCardName = MutableStateFlow("")
     val bankCardName: StateFlow<String> = _bankCardName.asStateFlow()
@@ -26,7 +29,12 @@ class SavedBankCardsViewModel(private val bankCardsCashbackCategoriesRepo: BankC
 
     fun saveBankCard() = viewModelScope.launch {
         bankCardsCashbackCategoriesRepo.addBankCard(
-            BankCard(name = bankCardName.value, order = bankCardsCashbackCategoriesRepo.getBankCardsCount())
+            BankCard(
+                name = bankCardName.value,
+                order = bankCardsCashbackCategoriesRepo.getBankCardsCount(),
+                // TODO add from ui
+                maxSelectedCategoriesCount = 0
+            )
         )
     }
 }

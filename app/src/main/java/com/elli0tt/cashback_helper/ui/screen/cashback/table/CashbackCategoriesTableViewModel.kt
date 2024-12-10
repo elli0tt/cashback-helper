@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
@@ -24,9 +25,17 @@ class CashbackCategoriesTableViewModel(
 
     private val bankCardsList: Flow<List<BankCard>> =
         bankCardsCashbackCategoriesRepo.getAllBankCards()
-    val bankCardsNamesList: StateFlow<List<String>> =
-        bankCardsCashbackCategoriesRepo.getAllBankCards()
-            .onlyNames()
+            .stateIn(
+                viewModelScope,
+                SharingStarted.WhileSubscribed(),
+                initialValue = emptyList()
+            )
+
+    val bankCardsTitlesList: StateFlow<List<String>> =
+        bankCardsList
+            .map { bankCards ->
+                bankCards.map { bankCard -> "${bankCard.name} (${bankCard.maxSelectedCategoriesCount})" }
+            }
             .stateIn(
                 viewModelScope,
                 SharingStarted.WhileSubscribed(),
@@ -117,7 +126,7 @@ class CashbackCategoriesTableViewModel(
             val cashbackCategoryUiState =
                 cashbackCategoriesTable.value[bankCardIndex][cashbackCategoryIndex]
             bankCardsCashbackCategoriesRepo.selectCashbackCategory(
-                bankCardName = bankCardsNamesList.value[bankCardIndex],
+                bankCardName = bankCardsTitlesList.value[bankCardIndex],
                 cashbackCategoryName = cashbackCategoriesNames.value[cashbackCategoryIndex],
                 isSelected = !cashbackCategoryUiState.isSelected
             )

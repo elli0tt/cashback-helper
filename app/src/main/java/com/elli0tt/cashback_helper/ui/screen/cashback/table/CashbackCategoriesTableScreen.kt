@@ -40,7 +40,7 @@ fun CashbackCategoriesTableScreen(
     val cashbackCategoriesTable: List<List<CashbackCategoryUiState>> by
     viewModel.cashbackCategoriesTable.collectAsState()
 
-    val bankCards: List<String> by viewModel.bankCardsNamesList.collectAsState()
+    val bankCards: List<String> by viewModel.bankCardsTitlesList.collectAsState()
     val cashbackCategories: List<String> by viewModel.cashbackCategoriesNames.collectAsState()
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->

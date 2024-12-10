@@ -22,8 +22,12 @@ class DebugActionsViewModel(
     fun prefillBankCards() = viewModelScope.launch {
         val existingBankCardsCount = bankCardsCashbackCategoriesRepo.getBankCardsCount()
         bankCardsCashbackCategoriesRepo.addBankCards(
-            BuildConfig.PREDEFINED_BANK_CARDS.mapIndexed { index, bankCardName ->
-                BankCard(name = bankCardName, existingBankCardsCount + index)
+            BuildConfig.PREDEFINED_BANK_CARDS_NAMES.mapIndexed { index, bankCardName ->
+                BankCard(
+                    name = bankCardName,
+                    order = existingBankCardsCount + index,
+                    maxSelectedCategoriesCount = BuildConfig.PREDEFINED_BANK_CARDS_MAX_SELECTED_CATEGORIES_COUNTS[index]
+                )
             }
         )
     }

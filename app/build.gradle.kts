@@ -1,3 +1,4 @@
+import com.android.build.gradle.ProguardFiles.getDefaultProguardFile
 import java.io.FileInputStream
 import java.util.Properties
 
@@ -41,8 +42,13 @@ android {
 
         buildConfigField(
             type = "String[]",
-            name = "PREDEFINED_BANK_CARDS",
-            value = predefinedBankCardsProperties["PREDEFINED_BANK_CARDS"].toString()
+            name = "PREDEFINED_BANK_CARDS_NAMES",
+            value = predefinedBankCardsProperties["PREDEFINED_BANK_CARDS_NAMES"].toString()
+        )
+        buildConfigField(
+            type = "int[]",
+            name = "PREDEFINED_BANK_CARDS_MAX_SELECTED_CATEGORIES_COUNTS",
+            value = predefinedBankCardsProperties["PREDEFINED_BANK_CARDS_MAX_SELECTED_CATEGORIES_COUNTS"].toString()
         )
     }
 

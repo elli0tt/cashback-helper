@@ -27,7 +27,8 @@ class DebugAddMockBankCardsWithCashbackCategoriesUseCaseImpl(
             resultList += BankCardWithCashbackCategories(
                 bankCard = BankCard(
                     name = "Bank Card $index",
-                    order = existingBankCardsCount + index
+                    order = existingBankCardsCount + index,
+                    maxSelectedCategoriesCount = index + 1
                 ),
                 generateMockCashbackCategories()
             )
