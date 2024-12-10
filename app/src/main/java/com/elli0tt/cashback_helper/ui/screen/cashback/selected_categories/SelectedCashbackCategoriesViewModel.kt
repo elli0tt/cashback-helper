@@ -15,7 +15,9 @@ class SelectedCashbackCategoriesViewModel(
         .getSelectedCashbackCategoriesWithBankCards()
         .map { selectedCashbackCategoriesWithBankCards ->
             SelectedCashbackCategoriesUiState.Loaded(
-                selectedCashbackCategoriesWithBankCards.toSelectedCashbackCategoriesList()
+                selectedCashbackCategoriesWithBankCards
+                    .toSelectedCashbackCategoriesList()
+                    .sortedBy { it.name }
             )
         }
 
